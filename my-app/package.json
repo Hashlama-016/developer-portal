@@ -46,6 +46,5 @@
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix"
     ]
-  },
-  "packageManager": "yarn@4.6.0"
+  }
 }

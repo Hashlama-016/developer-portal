@@ -1,0 +1,11 @@
+namespace: portal-team
+bdhevj:  hdh
+front:
+  name: front-name
+  replicas: 1
+  image: hello-world
+  service:
+    ports:
+      - name: http
+        containerPort: 80 
+        port: 80

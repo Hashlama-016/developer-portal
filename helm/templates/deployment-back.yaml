@@ -2,23 +2,23 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: {{ .Values.namespace }}
-  name: {{ .Values.front.name }}
+  name: {{ .Values.back.name }}
 spec:
   selector:
     matchLabels:
-      app: {{ .Values.front.name }}
-  replicas: {{ .Values.front.replicas }}
+      app: {{ .Values.back.name }}
+  replicas: {{ .Values.back.replicas }}
   template:
     metadata:
       labels:
-        app: {{ .Values.front.name }}
+        app: {{ .Values.back.name }}
     spec:
       containers:
-        - name: {{ .Values.front.name }}
-          image: {{ .Values.front.image }}
-          {{- if .Values.front.service }}
+        - name: {{ .Values.back.name }}
+          image: {{ .Values.back.image }}
+          {{- if .Values.back.service }}
           ports:
-          {{- range $port := .Values.front.service.ports }}
+          {{- range $port := .Values.back.service.ports }}
             - containerPort: {{ $port.containerPort }}
               protocol: {{ $port.protocol | default "TCP" }}
           {{- end }}

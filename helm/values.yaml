@@ -1,9 +1,21 @@
 namespace: portal-team
 bdhevj:  hdh
 front:
-  name: front-name
+  name: front
   replicas: 1
-  image: hello-world
+  image: registry.hub.docker.com/library/hello-world
+  route:
+    host: avatar-portal
+  service:
+    ports:
+      - name: http
+        containerPort: 80 
+        port: 80
+        
+back:
+  name: back
+  replicas: 1
+  image: registry.hub.docker.com/library/bey-world
   service:
     ports:
       - name: http

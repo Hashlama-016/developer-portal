@@ -1,10 +1,5 @@
-import express from "express";
+import app from "./server.js";
 
-const app = express();
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-
-
-export default app;
+app.listen(8080, () => {
+    console.log("hello world")
+});

@@ -20,6 +20,6 @@ app.use("/api", defaultRouter);
 app.use(errorMiddleware);
 
 app.listen(port, () => {
-  logger.info(`[Server]: Server is running at http://localhost:${port}`);
-  logger.info(`[Server]: Server is running at http://0.0.0.0:${port}`);
+  logger.info(`[Server]: Listening at http://localhost:${port}`);
+  logger.info(`[Server]: Listening at http://0.0.0.0:${port}`);
 });

@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "dev": "node --loader=ts-node/esm --env-file=.env --watch src/index.ts",
+    "dev": "node --import=./register.js --env-file=.env --watch src/index.ts",
     "build": "tsc",
     "start": "node --env-file=.env dist/index.js",
     "db:generate": "drizzle-kit generate --config=drizzle.config.ts",

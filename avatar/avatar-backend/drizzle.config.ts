@@ -9,7 +9,7 @@ export default defineConfig({
   out: "./drizzle",
   verbose: true,
   strict: true,
-  schemaFilter: ["services"],
+  schemaFilter: ["public"],
   dbCredentials: {
     host: process.env.DB_HOST!,
     port: +process.env.DB_PORT!,

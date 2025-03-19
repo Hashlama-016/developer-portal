@@ -1,0 +1,1 @@
+ALTER TABLE "services" ALTER COLUMN "data" SET NOT NULL;

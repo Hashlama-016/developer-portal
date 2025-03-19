@@ -1,5 +1,6 @@
-import logger from "../logger.js";
 import { Request, Response, NextFunction } from "express";
+import { StatusCodes } from "http-status-codes";
+import logger from "../logger.js";
 
 export const errorMiddleware = (
   err: Error,
@@ -8,7 +9,9 @@ export const errorMiddleware = (
   next: NextFunction
 ) => {
   logger.error(err);
-  res.status(500).send({ errors: [{ message: "Something went wrong" }] });
+  res
+    .status(StatusCodes.INTERNAL_SERVER_ERROR)
+    .send({ errors: [{ message: "Something went wrong" }] });
 };
 
 export default errorMiddleware;

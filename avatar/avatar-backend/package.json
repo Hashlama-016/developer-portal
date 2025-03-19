@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "node --loader=ts-node/esm --env-file=.env --watch src/index.ts",
     "build": "tsc",
-    "start": "node --env-file=.env dist/index.js"
+    "start": "node --env-file=.env dist/index.js",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +24,7 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "drizzle-orm": "^0.40.1",
     "express": "^4.21.2",
     "postgres": "^3.4.5"

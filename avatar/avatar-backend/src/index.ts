@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import defaultRouter from "./routers/index.js";
 import logger from "./logger.js";
-import { errorHandler } from "./middlewares/error.middleware.js";
+import errorMiddleware from "./middlewares/error.middleware.js";
 
 const port = Number(process.env.PORT || 8080);
 const app = express();
@@ -17,7 +17,7 @@ app.use(
 
 app.use("/api", defaultRouter);
 
-app.use(errorHandler);
+app.use(errorMiddleware);
 
 app.listen(port, () => {
   logger.info(`[Server]: Server is running at http://localhost:${port}`);

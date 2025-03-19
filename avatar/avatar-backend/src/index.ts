@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import mainRouter from "./routers/index.js"
+import defaultRouter from "./routers/index.js"
 
 const port = Number(process.env.PORT || 8080);
 const app = express();
@@ -13,7 +13,7 @@ app.use(
   })
 );
 
-app.use("/api", mainRouter);
+app.use("/api", defaultRouter);
 
 app.listen(port, () => {
   console.log(`[Server]: Server is running at http://localhost:${port}`);

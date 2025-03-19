@@ -7,8 +7,8 @@
     "dev": "node --loader=ts-node/esm --env-file=.env --watch src/index.ts",
     "build": "tsc",
     "start": "node --env-file=.env dist/index.js",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:generate": "drizzle-kit generate --config=drizzle.config.ts",
+    "db:migrate": "drizzle-kit migrate --config=drizzle.config.ts"
   },
   "keywords": [],
   "author": "",

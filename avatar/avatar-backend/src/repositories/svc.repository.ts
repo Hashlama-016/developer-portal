@@ -3,7 +3,7 @@ import db from "../db/db.js";
 
 export const getServices = async () => {
   try {
-    return await db.select().from(services).execute();
+    return await db.select().from(services);
   } catch (error) {
     throw error;
   }

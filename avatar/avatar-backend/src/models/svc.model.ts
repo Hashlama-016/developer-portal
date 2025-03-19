@@ -1,4 +1,12 @@
 export type Service = {
   id: string;
-  data: object;
-}
+  data: ServiceData;
+};
+
+export type ServiceData = {
+  name: string;
+  apiPath: string;
+  params: {
+    [key: string]: unknown;
+  };
+};

@@ -1,6 +1,6 @@
 import { Routes, Route, Link } from "react-router-dom";
-import Services from "./pages/Services";
-import Orders from "./pages/Orders";
+import Services from "@/pages/Services";
+import Orders from "@/pages/Orders/Orders";
 import "@/style/App.css";
 
 function App() {

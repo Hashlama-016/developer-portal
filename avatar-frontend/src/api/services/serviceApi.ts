@@ -4,8 +4,8 @@ import { CreateServiceDto, Service } from "./types";
 const SERVICE_BASE_URL = "/services";
 
 export const serviceApi = {
-  getAll: async (): Promise<Service> => {
-    const response = await api.get<Service>(SERVICE_BASE_URL);
+  getAll: async (): Promise<Service[]> => {
+    const response = await api.get<Service[]>(SERVICE_BASE_URL);
     return response.data;
   },
 

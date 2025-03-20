@@ -32,6 +32,11 @@
         name: rundeck
         state: present
 
+    - name: config rundeck-config.properties
+      template: 
+        src: rundeck-config.properties.j2
+        dest: /etc/rundeck/rundeck-config.properties
+
     - name: Enable and start Rundeck service
       systemd:
         name: rundeckd

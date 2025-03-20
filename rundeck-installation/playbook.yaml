@@ -37,12 +37,24 @@
         src: rundeck-config.properties.j2
         dest: /etc/rundeck/rundeck-config.properties
 
+    - name: repalce loaclhost
+      replace:
+        path: /etc/rundeck/framework.properties
+        regexp: "localhost"
+        replace: "{{ ansible_all_ipv4_addresses[0] }}"
+
     - name: Enable and start Rundeck service
-      systemd:
+      service:
         name: rundeckd
         enabled: yes
-        state: started
+        state: restarted
         
+    - name: open port 4440
+      ufw:
+        rule: allow
+        port: "443"
+        proto: tcp
+
     - name: open port 4440
       ufw:
         rule: allow

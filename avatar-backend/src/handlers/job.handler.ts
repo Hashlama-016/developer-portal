@@ -14,10 +14,8 @@ export const getAllJobs = async (
   next: NextFunction
 ) => {
   try {
-    console.log("aaa");
-
-    // const jobs: GetAllJobsResponse = await jobService.fetchAllJobs();
-    // res.json(jobs);
+    const jobs: GetAllJobsResponse = await jobService.fetchAllJobs();
+    res.json(jobs);
   } catch (error) {
     next(error);
   }

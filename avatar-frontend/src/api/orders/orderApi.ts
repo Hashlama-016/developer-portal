@@ -4,8 +4,8 @@ import { Order, CreateOrderDto } from "./types";
 const ORDER_BASE_URL = "/orders";
 
 export const orderApi = {
-  getAll: async (): Promise<Order> => {
-    const response = await api.get<Order>(ORDER_BASE_URL);
+  getAll: async (): Promise<Order[]> => {
+    const response = await api.get<Order[]>(ORDER_BASE_URL);
     return response.data;
   },
   getById: async (id: string): Promise<Order> => {

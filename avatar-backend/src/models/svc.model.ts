@@ -7,6 +7,6 @@ export type ServiceData = {
   name: string;
   apiPath: string;
   params: {
-    [key: string]: unknown;
+    [paramName: string]: unknown;
   };
 };

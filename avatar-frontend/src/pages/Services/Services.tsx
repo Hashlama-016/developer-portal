@@ -4,8 +4,9 @@ import {
   CardContent,
   CircularProgress,
   Container,
-  Grid2,
+  Grid,
   Typography,
+  Button,
 } from "@mui/material";
 import { serviceApi } from "@/api";
 import type { Service } from "@/api";
@@ -15,6 +16,7 @@ const Services: FunctionComponent = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedService, setSelectedService] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -42,50 +44,32 @@ const Services: FunctionComponent = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 5 }}>
-      {/* כותרת הדף */}
-      <Typography
-        variant="h4"
-        sx={{
-          textAlign: "center",
-          mb: 4,
-          fontWeight: "bold",
-          fontFamily: "'Playfair Display', serif",
-          color: "var(--white)",
-        }}
-      >
+      <Typography variant="h4" className="page-title">
         Services
       </Typography>
-      {/* רשת של הכרטיסים */}
-      <Grid2 container spacing={3} justifyContent="center">
+      <Grid container spacing={3} justifyContent="center">
         {services.map((service) => (
-          <Grid2 key={service.id}>
-            <Card
-              sx={{
-                p: 3,
-                boxShadow: 3,
-                borderRadius: "var(--border-radius)",
-                background: "var(--background-card)",
-                color: "var(--text-color)",
-                backdropFilter: "blur(10px)",
-                transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                "&:hover": {
-                  transform: "translateY(-5px)",
-                  boxShadow: "0 10px 35px rgba(155, 89, 182, 0.4)",
-                },
-              }}
-            >
+          <Grid item xs={12} sm={6} md={4} key={service.id}>
+            <Card className="service-card">
               <CardContent>
-                <Typography
-                  variant="h6"
-                  sx={{ fontWeight: "bold", color: "var(--white)" }}
-                >
+                <Typography variant="h6" className="service-title">
                   {service.id}
                 </Typography>
+                <Button
+                  variant="contained"
+                  color={selectedService === service.id ? "success" : "primary"}
+                  fullWidth
+                  onClick={() => setSelectedService(service.id)}
+                >
+                  {selectedService === service.id
+                    ? "Selected"
+                    : "Select Service"}
+                </Button>
               </CardContent>
             </Card>
-          </Grid2>
+          </Grid>
         ))}
-      </Grid2>
+      </Grid>
     </Container>
   );
 };

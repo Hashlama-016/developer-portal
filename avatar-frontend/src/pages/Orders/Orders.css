@@ -1,0 +1,33 @@
+.page-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-family: "Playfair Display", serif;
+    color: var(--white);
+  }
+  
+  .order-card {
+    padding: 15px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    background: var(--background-card);
+    color: var(--text-color);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .order-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 35px rgba(155, 89, 182, 0.4);
+  }
+  
+  .order-title {
+    font-weight: bold;
+    color: var(--white);
+  }
+  
+  .order-date {
+    color: var(--text-light);
+    margin-bottom: 10px;
+  }
+  

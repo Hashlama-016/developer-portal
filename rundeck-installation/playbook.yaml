@@ -2,6 +2,10 @@
 - name: Install Rundeck on Debian-based system
   hosts: localhost
   become: yes
+  vars:
+    url: jdbc:postgresql://10.50.2.5/rundeck_db
+    username: rundeck_user
+    password: n9AknTkoumI3aKTIaiKopw==
   roles:
     - install-nginx
   tasks:

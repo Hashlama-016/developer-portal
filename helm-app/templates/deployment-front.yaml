@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.front.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.front.name }}
+  replicas: {{ .Values.front.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.front.name }}
+    spec:
+      containers:
+        - name: {{ .Values.front.name }}
+          image: {{ .Values.front.image }}
+          {{- if .Values.front.service }}
+          ports:
+          {{- range $port := .Values.front.service.ports }}
+            - containerPort: {{ $port.containerPort }}
+              protocol: {{ $port.protocol | default "TCP" }}
+          {{- end }}
+          {{- end }}
+          resources: {}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.front.name }}-srv
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: {{ .Values.front.name }}
+  ports:
+  {{- range $port := .Values.front.service.ports }}
+    - targetPort: {{ $port.containerPort }}
+      protocol: {{ $port.protocol | default "TCP" }}
+      port: {{ $port.port }}
+      name: {{ $port.name }}
+  {{- end }}

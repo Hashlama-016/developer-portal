@@ -3,7 +3,7 @@ import jobHandler from "../handlers/job.handler.js";
 
 const router = express.Router();
 
-router.get("/all", jobHandler.getAllJobs);
+router.get("/rundeck/jobs", jobHandler.getAllJobs);
 router.post("/run", jobHandler.runJob);
 router.get("/executions", jobHandler.getAllExecutions);
 

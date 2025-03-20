@@ -19,7 +19,6 @@
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.10",
     "drizzle-kit": "^0.30.5",
-    "ts-node": "^10.9.2",
     "tsc-watch": "^6.2.1",
     "typescript": "^5.8.2"
   },

@@ -11,7 +11,8 @@ const headers = {
 };
 
 export const fetchAllJobs = async (): Promise<Job[]> => {
-  const response = await axios.get(`${RUNDECK_BASE_URL}/jobs`, { headers });
+  console.log("aaa");
+  const response = await axios.get(`${RUNDECK_BASE_URL}/projects`, { headers });
   return response.data;
 };
 

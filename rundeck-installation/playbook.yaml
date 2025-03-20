@@ -1,0 +1,39 @@
+---
+- name: Install Rundeck on Debian-based system
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Install required dependencies
+      apt:
+        name:
+          - curl
+          - openjdk-11-jdk
+        state: present
+        update_cache: yes
+
+    - name: Add Rundeck GPG key
+      shell: |
+        curl -fsSL https://packages.rundeck.com/pagerduty/rundeck/gpgkey | gpg --dearmor -o /usr/share/keyrings/rundeck-keyring.gpg
+      args:
+        creates: /usr/share/keyrings/rundeck-keyring.gpg
+
+    - name: Add Rundeck repository
+      copy:
+        dest: /etc/apt/sources.list.d/rundeck.list
+        content: |
+          deb [signed-by=/usr/share/keyrings/rundeck-keyring.gpg] https://packages.rundeck.com/pagerduty/rundeck/any/ any main
+
+    - name: Update package cache
+      apt:
+        update_cache: yes
+
+    - name: Install Rundeck
+      apt:
+        name: rundeck
+        state: present
+
+    - name: Enable and start Rundeck service
+      systemd:
+        name: rundeckd
+        enabled: yes
+        state: started

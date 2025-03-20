@@ -22,12 +22,12 @@
 
 - name: copy private key
   ansible.builtin.copy:
-    src: private-key.key
+    src: certs/private-key.key
     dest: /etc/ssl/private/private-key.key
   notify: Reload Nginx
 
 - name: copy cert
   ansible.builtin.copy:
-    src: private-key.key
+    src: certs/private-key.key
     dest: /etc/ssl/certs/crt.crt
   notify: Reload Nginx

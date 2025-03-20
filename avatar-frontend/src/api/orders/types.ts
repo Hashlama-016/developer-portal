@@ -1,36 +1,11 @@
-export interface Order {
+export type Order = {
   id: string;
   serviceId: string;
   userId: string;
-  status: "pending" | "processing" | "completed" | "cancelled";
-  totalAmount: number;
   createdAt: string;
-  updatedAt: string;
-  service?: {
-    id: string;
-    name: string;
-    price: number;
+  metadata: {
+    [key: string]: unknown;
   };
-}
+};
 
-export interface CreateOrderDto {
-  serviceId: string;
-  userId: string;
-}
-
-export interface UpdateOrderStatusDto {
-  id: string;
-  status: Order["status"];
-}
-
-export interface OrderResponse {
-  success: boolean;
-  data: Order;
-  message?: string;
-}
-
-export interface OrdersResponse {
-  success: boolean;
-  data: Order[];
-  message?: string;
-}
+export type CreateOrderDto = Omit<Order, "id" | "createdAt">;

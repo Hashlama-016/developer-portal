@@ -1,32 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
-  Grid,
+  Grid2,
   Card,
   CardContent,
   Typography,
-  Chip,
 } from "@mui/material";
+import { Order, orderApi } from "@/api";
 
-// רשימת ההזמנות
-const orders = [
-  {
-    id: "123",
-    date: "March 19, 2024",
-    service: "Premium Consultation Package",
-    price: "$299.00",
-    status: "Pending",
-  },
-  {
-    id: "124",
-    date: "March 18, 2024",
-    service: "VIP Support Package",
-    price: "$799.00",
-    status: "Completed",
-  },
-];
+const Orders: React.FunctionComponent = () => {
+  const [orders, setOrders] = useState<Order[]>([]);
 
-const Orders: React.FC = () => {
+  useEffect(() => {
+    const getOrders = async () => {
+      setOrders(await orderApi.getAll());
+    };
+
+    if (!orders.length) {
+      getOrders();
+    }
+  });
+
   return (
     <Container maxWidth="lg" sx={{ py: 5 }}>
       {/* כותרת הדף */}
@@ -40,13 +34,13 @@ const Orders: React.FC = () => {
           color: "var(--white)",
         }}
       >
-        Your Premium Orders
+        Orders
       </Typography>
 
       {/* רשת של הכרטיסים */}
-      <Grid container spacing={3}>
+      <Grid2 container spacing={3}>
         {orders.map((order) => (
-          <Grid item xs={12} sm={6} md={4} key={order.id}>
+          <Grid2 size={{ xs: 12, sm: 6, md: 6 }} key={order.id}>
             <Card
               sx={{
                 p: 3,
@@ -63,7 +57,7 @@ const Orders: React.FC = () => {
               }}
             >
               <CardContent>
-                {/* מספר הזמנה */}
+                {/* מספר הזמנה */ 1}
                 <Typography
                   variant="h6"
                   sx={{ fontWeight: "bold", color: "var(--white)" }}
@@ -71,37 +65,18 @@ const Orders: React.FC = () => {
                   Order #{order.id}
                 </Typography>
 
-                {/* סטטוס עם Chip */}
-                <Chip
-                  label={order.status}
-                  sx={{
-                    mt: 1,
-                    mb: 2,
-                    backgroundColor:
-                      order.status === "Completed" ? "#2ecc71" : "#ffcc00",
-                    color: "#fff",
-                    fontWeight: "bold",
-                  }}
-                />
-
                 {/* פרטי הזמנה */}
                 <Typography
                   variant="body2"
                   sx={{ color: "var(--text-light)", mb: 1 }}
                 >
-                  {order.date}
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{ fontWeight: "medium", mb: 1 }}
-                >
-                  {order.service}
+                  {order.createdAt}
                 </Typography>
               </CardContent>
             </Card>
-          </Grid>
+          </Grid2>
         ))}
-      </Grid>
+      </Grid2>
     </Container>
   );
 };

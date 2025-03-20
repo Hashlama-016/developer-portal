@@ -13,10 +13,9 @@ export const getServices = async () => {
 
 export const getService = async (id: string) => {
   try {
-    return await db
-      .select()
-      .from(services)
-      .where(eq(services.id, sql.placeholder("id")));
+    return await db.query.services.findFirst({
+      where: eq(services.id, id),
+    });
   } catch (error) {
     throw error;
   }

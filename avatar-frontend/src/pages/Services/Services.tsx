@@ -44,9 +44,6 @@ const Services: FunctionComponent = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 5 }}>
-      <Typography variant="h4" className="page-title">
-        Services
-      </Typography>
       <Grid container spacing={3} justifyContent="center">
         {services.map((service) => (
           <Grid item xs={12} sm={6} md={4} key={service.id}>

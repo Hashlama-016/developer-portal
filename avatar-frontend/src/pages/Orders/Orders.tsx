@@ -7,11 +7,12 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-import { Order, orderApi } from "@/api";
+import { rundeckApi } from "@/api";
+import type { Execution } from "@/api";
 import "./Orders.css";
 
 const Orders: FunctionComponent = () => {
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<Execution[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
@@ -19,7 +20,9 @@ const Orders: FunctionComponent = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await orderApi.getAll();
+        const response = await rundeckApi.getAllExecutions();
+        console.log("API Response:", response); // Debugging
+
         setOrders(response);
       } catch (err) {
         setError("Failed to fetch orders");
@@ -38,7 +41,7 @@ const Orders: FunctionComponent = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 5 }}>
       <Typography variant="h4" className="page-title">
-        Orders
+        Orders (Executions)
       </Typography>
       <Grid container spacing={3}>
         {orders.map((order) => (
@@ -48,8 +51,14 @@ const Orders: FunctionComponent = () => {
                 <Typography variant="h6" className="order-title">
                   Order #{order.id}
                 </Typography>
-                <Typography variant="body2" className="order-date">
-                  {order.createdAt}
+                <Typography variant="body2" className="order-info">
+                  Job Name: {order.jobName} <br />
+                  Project: {order.project} <br />
+                  Status: <strong>{order.status}</strong>
+                </Typography>
+                <Typography variant="body2" className="order-time">
+                  Started: {order.startTime} <br />
+                  Ended: {order.endTime}
                 </Typography>
                 <Button
                   variant="contained"

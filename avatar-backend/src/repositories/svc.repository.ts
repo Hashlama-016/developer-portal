@@ -1,7 +1,7 @@
 import { services } from "../db/schema.js";
 import db from "../db/db.js";
 import { sql, eq } from "drizzle-orm";
-import { Service } from "@/models/svc.model.js";
+import { CreateServiceDto } from "../models/svc.model.js";
 
 export const getServices = async () => {
   try {
@@ -13,18 +13,21 @@ export const getServices = async () => {
 
 export const getService = async (id: string) => {
   try {
-    return await db
-      .select()
-      .from(services)
-      .where(eq(services.id, sql.placeholder("id")));
+    return await db.query.services.findFirst({
+      where: eq(services.id, id),
+    });
   } catch (error) {
     throw error;
   }
 };
 
-export const insertService = async (service: Service) => {
+export const insertService = async (service: CreateServiceDto): Promise<string> => {
   try {
-    return await db.insert(services).values(service);
+    const results = await db
+    .insert(services)
+    .values(service)
+    .returning({ id: services.id });
+  return results[0].id;
   } catch (error) {
     throw error;
   }

@@ -10,3 +10,5 @@ export type ServiceData = {
     [paramName: string]: unknown;
   };
 };
+
+export type CreateServiceDto = Omit<Service, "id">;

@@ -1,11 +1,13 @@
 export type Order = {
   id: string;
-  readonly serviceId: string;
+  serviceId: string;
   metadata: OrderMetadata;
   userId?: string;
-  createdAt?: string;
+  createdAt: string;
 };
 
 export type OrderMetadata = {
-    [key: string]: unknown;
-}
+  [key: string]: unknown;
+};
+
+export type CreateOrderDto = Omit<Order, "id" | "createdAt">;

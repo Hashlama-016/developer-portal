@@ -22,9 +22,13 @@ export const getOrder = async (id: string) => {
   }
 };
 
-export const insertOrder = async (order: Order) => {
+export const insertOrder = async (order: Order): Promise<string> => {
   try {
-    return await db.insert(orders).values(order);
+    const results = await db
+      .insert(orders)
+      .values(order)
+      .returning({ id: orders.id });
+    return results[0].id;
   } catch (error) {
     throw error;
   }

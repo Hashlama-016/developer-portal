@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import serviceService from "../services/svc.service.js";
 import { StatusCodes } from "http-status-codes";
-import { Service } from "@/models/svc.model.js";
+import { CreateServiceDto } from "../models/svc.model.js";
 
 export const getServices = async (
   req: Request,
@@ -35,8 +35,11 @@ export const addService = async (
   next: NextFunction
 ) => {
   try {
-    await serviceService.addService(req.body as Service);
-    res.status(StatusCodes.OK).send();
+    const results = await serviceService.addService(
+      req.body as CreateServiceDto
+    );
+
+    res.status(StatusCodes.OK).json(results);
   } catch (error) {
     next(error);
   }

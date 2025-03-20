@@ -37,3 +37,9 @@
         name: rundeckd
         enabled: yes
         state: started
+        
+    - name: open port 4440
+      ufw:
+        role: allow
+        port: "4440"
+        proto: tcp

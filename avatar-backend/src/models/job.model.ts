@@ -1,41 +1,39 @@
-export type Job = {
+export interface Job {
   id: string;
   name: string;
   project: string;
+  group?: string;
   description?: string;
-  options: { [key: string]: unknown };
-  createdAt: string;
-};
+  uuid?: string;
+  options?: Record<string, any>;
+}
 
-export type Execution = {
+export interface Execution {
   id: string;
   jobId: string;
-  status: "running" | "failed" | "succeeded";
-  startTime: string;
-  endTime?: string;
-  duration?: string;
-  logs?: string[];
-};
-
-export type CreateJobRequest = {
-  name: string;
+  jobName: string;
   project: string;
-  description?: string;
-  options: { [key: string]: unknown };
-};
+  status: string;
+  startTime?: string;
+  endTime?: string;
+  user?: string;
+  logs?: string[] | null;
+}
 
-export type JobResponse = Job;
-export type GetAllJobsResponse = Job[];
+export interface GetAllJobsResponse {
+  jobs: Job[];
+}
 
-export type RunJobRequest = {
+export interface RunJobRequest {
   jobId: string;
   options: Record<string, string>;
-};
+}
 
-export type RunJobResponse = {
+export interface RunJobResponse {
   executionId: string;
   logs: string[];
-};
+}
 
-export type GetAllExecutionsResponse = Execution[];
-export type GetExecutionsByJobIdResponse = Execution[];
+export interface GetAllExecutionsResponse {
+  executions: Execution[];
+}

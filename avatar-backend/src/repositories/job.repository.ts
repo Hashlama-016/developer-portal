@@ -10,21 +10,58 @@ const headers = {
   "Content-Type": "application/json",
 };
 
+/**
+ * שליפת כל ה-Projects
+ */
+export const fetchAllProjects = async (): Promise<string[]> => {
+  try {
+    const response = await axios.get(`${RUNDECK_BASE_URL}/projects`, {
+      headers,
+    });
+    return response.data.map((p: { name: string }) => p.name);
+  } catch (error) {
+    console.error("Error fetching projects:", error);
+    throw error;
+  }
+};
+
+/**
+ * שליפת כל ה-Jobs עבור פרויקט
+ */
+export const fetchJobsByProject = async (project: string): Promise<Job[]> => {
+  try {
+    const response = await axios.get(
+      `${RUNDECK_BASE_URL}/project/${project}/jobs`,
+      { headers }
+    );
+    return response.data.map((job: any) => ({
+      id: job.id,
+      name: job.name,
+      project,
+      group: job.group || "",
+      description: job.description || "",
+      uuid: job.uuid || "",
+      options: job.options || {},
+    }));
+  } catch (error) {
+    console.error(`Error fetching jobs for project ${project}:`, error);
+    return [];
+  }
+};
+
+/**
+ * שליפת כל ה-Jobs מכל הפרויקטים
+ */
 export const fetchAllJobs = async (): Promise<Job[]> => {
-  const response = await axios.get(`${RUNDECK_BASE_URL}/jobs`, { headers });
-  return response.data;
+  const projects = await fetchAllProjects();
+  const jobPromises = projects.map(fetchJobsByProject);
+  const allJobs = await Promise.all(jobPromises);
+  return allJobs.flat();
 };
 
-export const fetchJobsByProject = async (
-  projectName: string
-): Promise<Job[]> => {
-  const response = await axios.get(
-    `${RUNDECK_BASE_URL}/project/${projectName}/jobs`,
-    { headers }
-  );
-  return response.data;
-};
-
+/**
+ * שליפת Job לפי ID
+ */
 export const fetchJobById = async (jobId: string): Promise<Job> => {
   const response = await axios.get(`${RUNDECK_BASE_URL}/job/${jobId}`, {
     headers,
@@ -32,6 +69,9 @@ export const fetchJobById = async (jobId: string): Promise<Job> => {
   return response.data;
 };
 
+/**
+ * הרצת Job עם Options
+ */
 export const runJob = async (
   jobId: string,
   options: Record<string, string>
@@ -44,41 +84,65 @@ export const runJob = async (
   return response.data.id;
 };
 
+/**
+ * שליפת לוגים של הרצה לפי Execution ID
+ */
 export const fetchExecutionLogs = async (
   executionId: string
 ): Promise<string[]> => {
-  const response = await axios.get(
-    `${RUNDECK_BASE_URL}/execution/${executionId}/output`,
-    { headers }
-  );
-  return response.data.entries.map((entry: any) => entry.log);
+  try {
+    const response = await axios.get(
+      `${RUNDECK_BASE_URL}/execution/${executionId}/output`,
+      { headers }
+    );
+    return response.data.entries
+      ? response.data.entries.map((entry: any) => entry.log)
+      : [];
+  } catch (error) {
+    console.error(`Error fetching logs for execution ${executionId}:`, error);
+    return [];
+  }
 };
 
-export const fetchAllExecutions = async (
-  max: number = 50,
-  offset: number = 0
-): Promise<Execution[]> => {
-  const response = await axios.get(
-    `${RUNDECK_BASE_URL}/executions?max=${max}&offset=${offset}`,
-    { headers }
-  );
-  return response.data.executions || [];
-};
-
+/**
+ * שליפת כל ההרצות עבור Job
+ */
 export const fetchExecutionsByJobId = async (
-  jobId: string,
-  max: number = 50
+  jobId: string
 ): Promise<Execution[]> => {
-  const response = await axios.get(
-    `${RUNDECK_BASE_URL}/job/${jobId}/executions?max=${max}`,
-    { headers }
-  );
-  return response.data.executions || [];
+  try {
+    const response = await axios.get(
+      `${RUNDECK_BASE_URL}/job/${jobId}/executions`,
+      { headers }
+    );
+    return response.data.executions.map((execution: any) => ({
+      id: execution.id,
+      jobId,
+      jobName: execution.job?.name || "",
+      project: execution.job?.project || "",
+      status: execution.status,
+      startTime: execution.dateStarted?.date || "",
+      endTime: execution.dateEnded?.date || "",
+      user: execution.user || "",
+    }));
+  } catch (error) {
+    console.error(`Error fetching executions for job ${jobId}:`, error);
+    return [];
+  }
+};
+
+/**
+ * שליפת כל ההרצות מכל ה-Jobs
+ */
+export const fetchAllExecutions = async (): Promise<Execution[]> => {
+  const jobs = await fetchAllJobs();
+  const executionPromises = jobs.map((job) => fetchExecutionsByJobId(job.id));
+  const allExecutions = await Promise.all(executionPromises);
+  return allExecutions.flat();
 };
 
 export default {
   fetchAllJobs,
-  fetchJobsByProject,
   fetchJobById,
   runJob,
   fetchExecutionLogs,

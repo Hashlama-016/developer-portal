@@ -1,12 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import jobService from "../services/job.service.js";
-import {
-  GetAllJobsResponse,
-  JobResponse,
-  RunJobRequest,
-  RunJobResponse,
-  GetAllExecutionsResponse,
-} from "../models/job.model.js";
 
 export const getAllJobs = async (
   req: Request,
@@ -14,8 +7,7 @@ export const getAllJobs = async (
   next: NextFunction
 ) => {
   try {
-    const jobs: GetAllJobsResponse = await jobService.fetchAllJobs();
-    res.json(jobs);
+    res.json(await jobService.fetchAllJobs());
   } catch (error) {
     next(error);
   }
@@ -27,9 +19,7 @@ export const runJob = async (
   next: NextFunction
 ) => {
   try {
-    const requestBody: RunJobRequest = req.body;
-    const logs: RunJobResponse = await jobService.runJobAndGetLogs(requestBody);
-    res.json(logs);
+    res.json(await jobService.runJobAndGetLogs(req.body));
   } catch (error) {
     next(error);
   }
@@ -41,9 +31,7 @@ export const getAllExecutions = async (
   next: NextFunction
 ) => {
   try {
-    const executions: GetAllExecutionsResponse =
-      await jobService.fetchAllExecutions();
-    res.json(executions);
+    res.json(await jobService.fetchAllExecutions());
   } catch (error) {
     next(error);
   }

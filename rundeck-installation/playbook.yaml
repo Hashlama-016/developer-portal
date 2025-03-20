@@ -2,6 +2,8 @@
 - name: Install Rundeck on Debian-based system
   hosts: localhost
   become: yes
+  roles:
+    - install-nginx
   tasks:
     - name: Install required dependencies
       apt:
@@ -32,23 +34,26 @@
         name: rundeck
         state: present
 
+    - name: Enable and start Rundeck service
+      service:
+        name: rundeckd
+        enabled: yes
+        state: started
+
     - name: config rundeck-config.properties
       template: 
         src: rundeck-config.properties.j2
         dest: /etc/rundeck/rundeck-config.properties
+      notify:
+        - restart Rundeck
 
     - name: repalce loaclhost
       replace:
         path: /etc/rundeck/framework.properties
         regexp: "localhost"
         replace: "{{ ansible_all_ipv4_addresses[0] }}"
+      notify: restart Rundeck
 
-    - name: Enable and start Rundeck service
-      service:
-        name: rundeckd
-        enabled: yes
-        state: restarted
-        
     - name: open port 4440
       ufw:
         rule: allow
@@ -60,3 +65,10 @@
         rule: allow
         port: "4440"
         proto: tcp
+
+  handlers:
+    - name: restart Rundeck
+      service:
+        name: rundeckd
+        state: restarted
+        

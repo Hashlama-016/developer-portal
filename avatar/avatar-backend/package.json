@@ -4,21 +4,31 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "dev": "node --loader=ts-node/esm --env-file=.env --watch src/index.ts",
+    "dev": "node --import=./register.js --env-file=.env --watch src/index.ts",
     "build": "tsc",
-    "start": "node --env-file=.env dist/index.js"
+    "start": "node --env-file=.env dist/index.js",
+    "db:generate": "drizzle-kit generate --config=drizzle.config.ts",
+    "db:migrate": "drizzle-kit migrate --config=drizzle.config.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/node": "^22.13.10",
+    "drizzle-kit": "^0.30.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2"
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.21.2"
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.40.1",
+    "express": "^4.21.2",
+    "http-status-codes": "^2.3.0",
+    "postgres": "^3.4.5",
+    "winston": "^3.17.0"
   }
 }

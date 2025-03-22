@@ -1,11 +1,11 @@
 import { sql, eq } from "drizzle-orm";
 import { orders } from "../db/schema.js";
 import db from "../db/db.js";
-import { Order } from "../models/order.model.js";
+import { CreateOrderDto } from "../models/order.model.js";
 
 export const getOrders = async () => {
   try {
-    return await db.query.services.findMany({});
+    return await db.query.orders.findMany({});
   } catch (error) {
     throw error;
   }
@@ -13,18 +13,21 @@ export const getOrders = async () => {
 
 export const getOrder = async (id: string) => {
   try {
-    return await db
-      .select()
-      .from(orders)
-      .where(eq(orders.id, sql.placeholder("id")));
+    return await db.query.orders.findFirst({
+      where: eq(orders.id, id),
+    });
   } catch (error) {
     throw error;
   }
 };
 
-export const insertOrder = async (order: Order) => {
+export const insertOrder = async (order: CreateOrderDto): Promise<string> => {
   try {
-    return await db.insert(orders).values(order);
+    const results = await db
+      .insert(orders)
+      .values(order)
+      .returning({ id: orders.id });
+    return results[0].id;
   } catch (error) {
     throw error;
   }

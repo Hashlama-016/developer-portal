@@ -1,5 +1,5 @@
-import { OrderMetadata } from "@/models/order.model.js";
-import { ServiceData } from "@/models/svc.model.js";
+import { OrderMetadata } from "../models/order.model.js";
+import { ServiceData } from "../models/svc.model.js";
 import { pgSchema, json, uuid, timestamp, pgTable } from "drizzle-orm/pg-core";
 
 export const services = pgTable("services", {

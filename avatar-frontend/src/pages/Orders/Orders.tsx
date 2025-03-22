@@ -51,7 +51,7 @@ const Orders: FunctionComponent = () => {
       </Typography>
       <Grid2 container spacing={3}>
         {orders.map((order) => (
-          <Grid2 key={order.id} size={{ xs: 12, sm: 6, md: 4 }}>
+          <Grid2 key={order.id} size={{ xs: 12, sm: 6, md: 6 }}>
             <Card className="order-card">
               <CardContent>
                 <Typography variant="h6" className="order-title">

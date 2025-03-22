@@ -46,7 +46,7 @@ const Services: FunctionComponent = () => {
     <Container maxWidth="lg" sx={{ py: 5 }}>
       <Grid2 container spacing={3} justifyContent="center">
         {services.map((service) => (
-          <Grid2 key={service.id} size={{ xs: 12, sm: 6, md: 4 }}>
+          <Grid2 key={service.id} size={{ xs: 12, sm: 6, md: 6 }}>
             <Card className="service-card">
               <CardContent>
                 <Typography variant="h6" className="service-title">

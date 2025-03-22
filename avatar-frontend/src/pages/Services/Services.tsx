@@ -4,7 +4,7 @@ import {
   CardContent,
   CircularProgress,
   Container,
-  Grid,
+  Grid2,
   Typography,
   Button,
 } from "@mui/material";
@@ -44,9 +44,9 @@ const Services: FunctionComponent = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 5 }}>
-      <Grid container spacing={3} justifyContent="center">
+      <Grid2 container spacing={3} justifyContent="center">
         {services.map((service) => (
-          <Grid item xs={12} sm={6} md={4} key={service.id}>
+          <Grid2 key={service.id} size={{ xs: 12, sm: 6, md: 4 }}>
             <Card className="service-card">
               <CardContent>
                 <Typography variant="h6" className="service-title">
@@ -64,9 +64,9 @@ const Services: FunctionComponent = () => {
                 </Button>
               </CardContent>
             </Card>
-          </Grid>
+          </Grid2>
         ))}
-      </Grid>
+      </Grid2>
     </Container>
   );
 };

@@ -1,0 +1,78 @@
+---
+- name: Install Rundeck on Debian-based system
+  hosts: localhost
+  become: yes
+  vars:
+    url: jdbc:postgresql://10.50.2.5/rundeck_db
+    username: rundeck_user
+    password: n9AknTkoumI3aKTIaiKopw==
+  roles:
+    - install-nginx
+  tasks:
+    - name: Install required dependencies
+      apt:
+        name:
+          - curl
+          - openjdk-11-jdk
+        state: present
+        update_cache: yes
+
+    - name: Add Rundeck GPG key
+      shell: |
+        curl -fsSL https://packages.rundeck.com/pagerduty/rundeck/gpgkey | gpg --dearmor -o /usr/share/keyrings/rundeck-keyring.gpg
+      args:
+        creates: /usr/share/keyrings/rundeck-keyring.gpg
+
+    - name: Add Rundeck repository
+      copy:
+        dest: /etc/apt/sources.list.d/rundeck.list
+        content: |
+          deb [signed-by=/usr/share/keyrings/rundeck-keyring.gpg] https://packages.rundeck.com/pagerduty/rundeck/any/ any main
+
+    - name: Update package cache
+      apt:
+        update_cache: yes
+
+    - name: Install Rundeck
+      apt:
+        name: rundeck
+        state: present
+
+    - name: Enable and start Rundeck service
+      service:
+        name: rundeckd
+        enabled: yes
+        state: started
+
+    - name: config rundeck-config.properties
+      template: 
+        src: rundeck-config.properties.j2
+        dest: /etc/rundeck/rundeck-config.properties
+      notify:
+        - restart Rundeck
+
+    - name: repalce loaclhost
+      replace:
+        path: /etc/rundeck/framework.properties
+        regexp: "localhost"
+        replace: "{{ ansible_all_ipv4_addresses[0] }}"
+      notify: restart Rundeck
+
+    - name: open port 4440
+      ufw:
+        rule: allow
+        port: "443"
+        proto: tcp
+
+    - name: open port 4440
+      ufw:
+        rule: allow
+        port: "4440"
+        proto: tcp
+
+  handlers:
+    - name: restart Rundeck
+      service:
+        name: rundeckd
+        state: restarted
+        

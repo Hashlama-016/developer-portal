@@ -1,11 +1,12 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import {
   Container,
-  Grid,
+  Grid2,
   Card,
   CardContent,
   Typography,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import { rundeckApi } from "@/api";
 import type { Execution } from "@/api";
@@ -35,7 +36,12 @@ const Orders: FunctionComponent = () => {
     fetchOrders();
   }, []);
 
-  if (loading) return <div className="loading">Loading...</div>;
+  if (loading)
+    return (
+      <div className="loading">
+        <CircularProgress />
+      </div>
+    );
   if (error) return <div className="error">{error}</div>;
 
   return (
@@ -43,9 +49,9 @@ const Orders: FunctionComponent = () => {
       <Typography variant="h4" className="page-title">
         Orders (Executions)
       </Typography>
-      <Grid container spacing={3}>
+      <Grid2 container spacing={3}>
         {orders.map((order) => (
-          <Grid item xs={12} sm={6} md={4} key={order.id}>
+          <Grid2 key={order.id} size={{ xs: 12, sm: 6, md: 6 }}>
             <Card className="order-card">
               <CardContent>
                 <Typography variant="h6" className="order-title">
@@ -70,9 +76,9 @@ const Orders: FunctionComponent = () => {
                 </Button>
               </CardContent>
             </Card>
-          </Grid>
+          </Grid2>
         ))}
-      </Grid>
+      </Grid2>
     </Container>
   );
 };

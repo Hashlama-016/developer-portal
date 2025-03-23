@@ -6,5 +6,6 @@ const router = express.Router();
 router.get("/jobs", jobHandler.getJobs);
 router.post("/jobs/:id/run", jobHandler.runJob);
 router.get("/executions", jobHandler.getExecutions);
+router.get("/executions/:id/output", jobHandler.getExecutionLogs);
 
 export default router;

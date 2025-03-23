@@ -1,5 +1,10 @@
 import axios from "axios";
-import { Job, Execution, ProjectJob } from "../models/job.model.js";
+import {
+  Job,
+  Execution,
+  ProjectJob,
+  ExecutionLogEntry,
+} from "../models/job.model.js";
 
 const RUNDECK_BASE_URL = process.env.RUNDECK_BASE_URL;
 const AUTH_TOKEN = process.env.RUNDECK_AUTH_TOKEN;
@@ -34,7 +39,7 @@ export const getJobsByProject = async (projectName: string): Promise<Job[]> => {
       project: projectName,
       group: job.group || "",
       description: job.description || "",
-      uuid: job.uuid || ""
+      uuid: job.uuid || "",
     }));
   } catch (error) {
     console.error(`Error fetching jobs for project ${projectName}:`, error);
@@ -70,15 +75,13 @@ export const runJob = async (
 
 export const getExecutionLogs = async (
   executionId: string
-): Promise<string[]> => {
+): Promise<ExecutionLogEntry[]> => {
   try {
     const response = await axios.get(
       `${RUNDECK_BASE_URL}/execution/${executionId}/output`,
       { headers }
     );
-    return response.data.entries
-      ? response.data.entries.map((entry: any) => entry.log)
-      : [];
+    return (response.data.entries || []) as ExecutionLogEntry[];
   } catch (error) {
     console.error(`Error fetching logs for execution ${executionId}:`, error);
     return [];

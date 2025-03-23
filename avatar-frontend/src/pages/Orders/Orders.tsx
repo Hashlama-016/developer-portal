@@ -1,20 +1,30 @@
-import React from "react";
-import { orderApi } from "@/api";
-import type { Order } from "@/api";
+import { FunctionComponent, useEffect, useState } from "react";
+import {
+  Container,
+  Grid2,
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  CircularProgress,
+} from "@mui/material";
+import { rundeckApi } from "@/api";
+import type { Execution } from "@/api";
 import "./Orders.css";
 
-const Orders: React.FC = () => {
-  const [orders, setOrders] = React.useState<Order[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
+const Orders: FunctionComponent = () => {
+  const [orders, setOrders] = useState<Execution[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchOrders = async () => {
       try {
-        // Replace with actual user ID from auth context
-        const userId = "current-user-id";
-        const response = await orderApi.getUserOrders(userId);
-        setOrders(response.data);
+        const response = await rundeckApi.getAllExecutions();
+        console.log("API Response:", response); // Debugging
+
+        setOrders(response);
       } catch (err) {
         setError("Failed to fetch orders");
         console.error(err);
@@ -26,50 +36,50 @@ const Orders: React.FC = () => {
     fetchOrders();
   }, []);
 
-  if (loading) return <div className="loading">Loading...</div>;
+  if (loading)
+    return (
+      <div className="loading">
+        <CircularProgress />
+      </div>
+    );
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div className="orders-page">
-      <h1>Your Premium Orders</h1>
-      <div className="orders-list">
+    <Container maxWidth="lg" sx={{ py: 5 }}>
+      <Typography variant="h4" className="page-title">
+        Orders (Executions)
+      </Typography>
+      <Grid2 container spacing={3}>
         {orders.map((order) => (
-          <div key={order.id} className="order-card">
-            <div className="order-header">
-              <h2>Order #{order.id}</h2>
-              <span className={`order-status status-${order.status}`}>
-                {order.status}
-              </span>
-            </div>
-            <div className="order-details">
-              <p className="order-date">
-                {new Date(order.createdAt).toLocaleDateString()}
-              </p>
-              <p className="order-service">{order.service?.name}</p>
-              <p className="order-price">${order.totalAmount}</p>
-            </div>
-            <div className="order-progress">
-              <div className="progress-bar">
-                <div
-                  className="progress"
-                  style={{
-                    width:
-                      order.status === "completed"
-                        ? "100%"
-                        : order.status === "processing"
-                        ? "60%"
-                        : "30%",
-                  }}
-                ></div>
-              </div>
-              <p className="progress-text">
-                {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-              </p>
-            </div>
-          </div>
+          <Grid2 key={order.id} size={{ xs: 12, sm: 6, md: 6 }}>
+            <Card className="order-card">
+              <CardContent>
+                <Typography variant="h6" className="order-title">
+                  Order #{order.id}
+                </Typography>
+                <Typography variant="body2" className="order-info">
+                  Job Name: {order.jobName} <br />
+                  Project: {order.project} <br />
+                  Status: <strong>{order.status}</strong>
+                </Typography>
+                <Typography variant="body2" className="order-time">
+                  Started: {order.startTime} <br />
+                  Ended: {order.endTime}
+                </Typography>
+                <Button
+                  variant="contained"
+                  color={selectedOrder === order.id ? "success" : "primary"}
+                  fullWidth
+                  onClick={() => setSelectedOrder(order.id)}
+                >
+                  {selectedOrder === order.id ? "Selected" : "Select Order"}
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid2>
         ))}
-      </div>
-    </div>
+      </Grid2>
+    </Container>
   );
 };
 

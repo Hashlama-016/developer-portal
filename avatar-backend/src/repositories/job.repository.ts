@@ -13,7 +13,7 @@ const headers = {
 /**
  * שליפת כל ה-Projects
  */
-export const fetchAllProjects = async (): Promise<string[]> => {
+export const getAllProjects = async (): Promise<string[]> => {
   try {
     const response = await axios.get(`${RUNDECK_BASE_URL}/projects`, {
       headers,
@@ -28,7 +28,7 @@ export const fetchAllProjects = async (): Promise<string[]> => {
 /**
  * שליפת כל ה-Jobs עבור פרויקט
  */
-export const fetchJobsByProject = async (project: string): Promise<Job[]> => {
+export const getJobsByProject = async (project: string): Promise<Job[]> => {
   try {
     const response = await axios.get(
       `${RUNDECK_BASE_URL}/project/${project}/jobs`,
@@ -52,9 +52,9 @@ export const fetchJobsByProject = async (project: string): Promise<Job[]> => {
 /**
  * שליפת כל ה-Jobs מכל הפרויקטים
  */
-export const fetchAllJobs = async (): Promise<Job[]> => {
-  const projects = await fetchAllProjects();
-  const jobPromises = projects.map(fetchJobsByProject);
+export const getAllJobs = async (): Promise<Job[]> => {
+  const projects = await getAllProjects();
+  const jobPromises = projects.map(getJobsByProject);
   const allJobs = await Promise.all(jobPromises);
   return allJobs.flat();
 };
@@ -62,7 +62,7 @@ export const fetchAllJobs = async (): Promise<Job[]> => {
 /**
  * שליפת Job לפי ID
  */
-export const fetchJobById = async (jobId: string): Promise<Job> => {
+export const getJobById = async (jobId: string): Promise<Job> => {
   const response = await axios.get(`${RUNDECK_BASE_URL}/job/${jobId}`, {
     headers,
   });
@@ -87,7 +87,7 @@ export const runJob = async (
 /**
  * שליפת לוגים של הרצה לפי Execution ID
  */
-export const fetchExecutionLogs = async (
+export const getExecutionLogs = async (
   executionId: string
 ): Promise<string[]> => {
   try {
@@ -107,7 +107,7 @@ export const fetchExecutionLogs = async (
 /**
  * שליפת כל ההרצות עבור Job
  */
-export const fetchExecutionsByJobId = async (
+export const getExecutionsByJobId = async (
   jobId: string
 ): Promise<Execution[]> => {
   try {
@@ -134,18 +134,18 @@ export const fetchExecutionsByJobId = async (
 /**
  * שליפת כל ההרצות מכל ה-Jobs
  */
-export const fetchAllExecutions = async (): Promise<Execution[]> => {
-  const jobs = await fetchAllJobs();
-  const executionPromises = jobs.map((job) => fetchExecutionsByJobId(job.id));
+export const getAllExecutions = async (): Promise<Execution[]> => {
+  const jobs = await getAllJobs();
+  const executionPromises = jobs.map((job) => getExecutionsByJobId(job.id));
   const allExecutions = await Promise.all(executionPromises);
   return allExecutions.flat();
 };
 
 export default {
-  fetchAllJobs,
-  fetchJobById,
+  getAllJobs,
+  getJobById,
   runJob,
-  fetchExecutionLogs,
-  fetchAllExecutions,
-  fetchExecutionsByJobId,
+  getExecutionLogs,
+  getAllExecutions,
+  getExecutionsByJobId,
 };

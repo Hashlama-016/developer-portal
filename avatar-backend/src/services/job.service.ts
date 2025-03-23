@@ -1,17 +1,15 @@
 import jobRepository from "../repositories/job.repository.js";
 import {
-  GetAllJobsResponse,
   RunJobRequest,
   RunJobResponse,
   GetAllExecutionsResponse,
+  Job,
 } from "../models/job.model.js";
 
 /**
  * שליפת כל ה-Jobs מכל הפרויקטים
  */
-export const fetchAllJobs = async (): Promise<GetAllJobsResponse> => ({
-  jobs: await jobRepository.fetchAllJobs(),
-});
+export const fetchAllJobs = (): Promise<Job[]> => jobRepository.getAllJobs();
 
 /**
  * הרצת Job וקבלת הלוגים
@@ -24,7 +22,7 @@ export const runJobAndGetLogs = async (
     request.options
   );
   await new Promise((resolve) => setTimeout(resolve, 2000)); // המתנה ללוגים
-  const logs = await jobRepository.fetchExecutionLogs(executionId);
+  const logs = await jobRepository.getExecutionLogs(executionId);
   return { executionId, logs };
 };
 
@@ -33,7 +31,7 @@ export const runJobAndGetLogs = async (
  */
 export const fetchAllExecutions =
   async (): Promise<GetAllExecutionsResponse> => ({
-    executions: await jobRepository.fetchAllExecutions(),
+    executions: await jobRepository.getAllExecutions(),
   });
 
 export default {

@@ -19,21 +19,3 @@ export interface Execution {
   user?: string;
   logs?: string[] | null;
 }
-
-export interface GetAllJobsResponse {
-  jobs: Job[];
-}
-
-export interface RunJobRequest {
-  jobId: string;
-  options: Record<string, string>;
-}
-
-export interface RunJobResponse {
-  executionId: string;
-  logs: string[];
-}
-
-export interface GetAllExecutionsResponse {
-  executions: Execution[];
-}

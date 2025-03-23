@@ -10,9 +10,6 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-/**
- * שליפת כל ה-Projects
- */
 export const getAllProjects = async (): Promise<string[]> => {
   try {
     const response = await axios.get(`${RUNDECK_BASE_URL}/projects`, {
@@ -25,9 +22,6 @@ export const getAllProjects = async (): Promise<string[]> => {
   }
 };
 
-/**
- * שליפת כל ה-Jobs עבור פרויקט
- */
 export const getJobsByProject = async (project: string): Promise<Job[]> => {
   try {
     const response = await axios.get(
@@ -49,9 +43,6 @@ export const getJobsByProject = async (project: string): Promise<Job[]> => {
   }
 };
 
-/**
- * שליפת כל ה-Jobs מכל הפרויקטים
- */
 export const getAllJobs = async (): Promise<Job[]> => {
   const projects = await getAllProjects();
   const jobPromises = projects.map(getJobsByProject);
@@ -59,9 +50,6 @@ export const getAllJobs = async (): Promise<Job[]> => {
   return allJobs.flat();
 };
 
-/**
- * שליפת Job לפי ID
- */
 export const getJobById = async (jobId: string): Promise<Job> => {
   const response = await axios.get(`${RUNDECK_BASE_URL}/job/${jobId}`, {
     headers,
@@ -69,9 +57,6 @@ export const getJobById = async (jobId: string): Promise<Job> => {
   return response.data;
 };
 
-/**
- * הרצת Job עם Options
- */
 export const runJob = async (
   jobId: string,
   options: Record<string, string>
@@ -84,9 +69,6 @@ export const runJob = async (
   return response.data.id;
 };
 
-/**
- * שליפת לוגים של הרצה לפי Execution ID
- */
 export const getExecutionLogs = async (
   executionId: string
 ): Promise<string[]> => {
@@ -104,9 +86,6 @@ export const getExecutionLogs = async (
   }
 };
 
-/**
- * שליפת כל ההרצות עבור Job
- */
 export const getExecutionsByJobId = async (
   jobId: string
 ): Promise<Execution[]> => {
@@ -131,9 +110,6 @@ export const getExecutionsByJobId = async (
   }
 };
 
-/**
- * שליפת כל ההרצות מכל ה-Jobs
- */
 export const getAllExecutions = async (): Promise<Execution[]> => {
   const jobs = await getAllJobs();
   const executionPromises = jobs.map((job) => getExecutionsByJobId(job.id));

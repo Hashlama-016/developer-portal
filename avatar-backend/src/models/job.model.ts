@@ -8,6 +8,15 @@ export interface Job {
   options?: Record<string, any>;
 }
 
+export interface ProjectJob {
+  id: string;
+  name: string;
+  project: string;
+  group?: string;
+  description?: string;
+  uuid?: string;
+}
+
 export interface Execution {
   id: string;
   jobId: string;

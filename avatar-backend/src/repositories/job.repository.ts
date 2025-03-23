@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Job, Execution } from "../models/job.model.js";
+import { Job, Execution, ProjectJob } from "../models/job.model.js";
 
 const RUNDECK_BASE_URL = process.env.RUNDECK_BASE_URL;
 const AUTH_TOKEN = process.env.RUNDECK_AUTH_TOKEN;
@@ -22,23 +22,22 @@ export const getAllProjects = async (): Promise<string[]> => {
   }
 };
 
-export const getJobsByProject = async (project: string): Promise<Job[]> => {
+export const getJobsByProject = async (projectName: string): Promise<Job[]> => {
   try {
     const response = await axios.get(
-      `${RUNDECK_BASE_URL}/project/${project}/jobs`,
+      `${RUNDECK_BASE_URL}/project/${projectName}/jobs`,
       { headers }
     );
-    return response.data.map((job: any) => ({
+    return response.data.map((job: ProjectJob) => ({
       id: job.id,
       name: job.name,
-      project,
+      project: projectName,
       group: job.group || "",
       description: job.description || "",
-      uuid: job.uuid || "",
-      options: job.options || {},
+      uuid: job.uuid || ""
     }));
   } catch (error) {
-    console.error(`Error fetching jobs for project ${project}:`, error);
+    console.error(`Error fetching jobs for project ${projectName}:`, error);
     return [];
   }
 };

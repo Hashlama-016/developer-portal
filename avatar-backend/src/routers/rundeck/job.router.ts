@@ -1,5 +1,5 @@
 import express from "express";
-import jobHandler from "../handlers/job.handler.js";
+import jobHandler from "../../handlers/job.handler.js";
 
 const router = express.Router();
 

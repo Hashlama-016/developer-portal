@@ -1,8 +1,14 @@
 ---
-- name: Install Rundeck on Debian-based system
+- name: Install Rundeck 
   hosts: localhost
+  gather_facts: no
   become: yes
+  vars_files:
+    - ../secerts/sercrets.yaml
   tasks:
+
+  #### install rundeck ###
+
     - name: Install required dependencies
       apt:
         name:
@@ -57,6 +63,26 @@
         rule: allow
         port: "4440"
         proto: tcp
+
+    ### add user ###
+
+    - name: Encrypt password using Rundeck's built-in utility
+      expect:
+        command: "java -jar /var/lib/rundeck/bootstrap/rundeck-5.10.0-20250312.war --encryptpwd Jetty"
+        responses:
+          "Username \\(Optional, but necessary for Crypt encoding\\):": "{{ rundeck_user }}"
+          "\\*Value To Encrypt \\(The text you want to encrypt\\):": "{{ rundeck_pass }}"
+      register: encryption_output
+
+    - name: get encrypted password
+      set_fact:
+        rundeck_pass: "{{ (encryption_output.stdout_lines | map('regex_search', 'bcrypt: BCRYPT.*$') | select() | first )[8: ] }}"
+    
+    - name: config realm.properties
+      template: 
+        src: ../templates/realm.properties.j2
+        dest: /etc/rundeck/realm.properties
+
 
   handlers:
     - name: restart Rundeck

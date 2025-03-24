@@ -37,8 +37,8 @@ export const getJobsByProject = async (projectName: string): Promise<Job[]> => {
         id: job.id,
         name: job.name,
         project: projectName,
-        group: job.group || "",
-        description: job.description || "",
+        group: job.group,
+        description: job.description,
       })
     );
   } catch (error) {
@@ -48,8 +48,8 @@ export const getJobsByProject = async (projectName: string): Promise<Job[]> => {
 
 export const getAllJobs = async (): Promise<ProjectJob[]> => {
   const projects = await getAllProjects();
-  const jobPromises = projects.map(getJobsByProject);
-  const allJobs = await Promise.all(jobPromises);
+  const allJobs = await Promise.all(projects.map(getJobsByProject));
+
   return allJobs.flat();
 };
 
@@ -95,7 +95,16 @@ export const getExecutionLogs = async (
       `${RUNDECK_BASE_URL}/execution/${executionId}/output`,
       { headers }
     );
-    return (response.data.entries || []) as ExecutionLogEntry[];
+    return (
+      response.data.entries?.map(
+        (logEntry: any): ExecutionLogEntry => ({
+          time: logEntry.time,
+          level: logEntry.level,
+          log: logEntry.log,
+          user: logEntry.user,
+        })
+      ) || []
+    );
   } catch (error) {
     throw error;
   }
@@ -109,16 +118,18 @@ export const getExecutionsByJobId = async (
       `${RUNDECK_BASE_URL}/job/${jobId}/executions`,
       { headers }
     );
-    return response.data.executions.map((execution: any) => ({
-      id: execution.id,
-      jobId,
-      jobName: execution.job?.name || "",
-      project: execution.job?.project || "",
-      status: execution.status,
-      startTime: execution.dateStarted?.date || "",
-      endTime: execution.dateEnded?.date || "",
-      user: execution.user || "",
-    }));
+    return response.data.executions.map(
+      (execution: any): Execution => ({
+        id: execution.id,
+        jobId,
+        jobName: execution.job.name,
+        project: execution.project,
+        status: execution.status,
+        startTime: execution.dateStarted?.date,
+        endTime: execution.dateEnded?.date,
+        user: execution.user,
+      })
+    );
   } catch (error) {
     throw error;
   }

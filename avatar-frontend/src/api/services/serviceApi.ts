@@ -8,7 +8,6 @@ export const serviceApi = {
     const response = await api.get<Service[]>(SERVICE_BASE_URL);
     return response.data;
   },
-
   getById: async (id: string): Promise<Service> => {
     const response = await api.get<Service>(`${SERVICE_BASE_URL}/${id}`);
     return response.data;

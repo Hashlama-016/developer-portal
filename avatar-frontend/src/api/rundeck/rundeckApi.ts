@@ -18,7 +18,6 @@ export const rundeckApi = {
     const response = await api.get<Job>(`${RUNDECK_BASE_PATH}/jobs/${jobId}`);
     return response.data;
   },
-
   runJob: async (jobId: string, options: JobRunOptions): Promise<string> => {
     const response = await api.post<string>(
       `${RUNDECK_BASE_PATH}/jobs/${jobId}/run`,
@@ -26,7 +25,6 @@ export const rundeckApi = {
     );
     return response.data;
   },
-
   getExecutions: async (): Promise<Execution[]> => {
     const response = await api.get<Execution[]>(
       `${RUNDECK_BASE_PATH}/executions`

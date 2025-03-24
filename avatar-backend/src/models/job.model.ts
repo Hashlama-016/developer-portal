@@ -9,7 +9,15 @@ export type Job = {
 
 export type JobOptions = {
   name: string;
-  value: string;
+  label?: string;
+  description?: string;
+  defaultValue?: string;
+  required?: boolean;
+  multivalued?: boolean;
+  values?: string[];
+  delimiter?: string;
+  isDate?: boolean;
+  secure?: boolean;
 };
 
 export type JobRunOptions = Record<string, string>;

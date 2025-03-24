@@ -16,6 +16,20 @@ export const getJobs = async (
   }
 };
 
+export const getJobById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const results = await jobService.getJobById(req.params.id);
+
+    res.status(StatusCodes.OK).json(results);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const runJob = async (
   req: Request,
   res: Response,
@@ -62,4 +76,5 @@ export default {
   runJob,
   getExecutions,
   getExecutionLogs,
+  getJobById,
 };

@@ -1,7 +1,15 @@
 import jobRepository from "../repositories/job.repository.js";
-import { Execution, ExecutionLogEntry, Job } from "../models/job.model.js";
+import {
+  Execution,
+  ExecutionLogEntry,
+  Job,
+  ProjectJob,
+} from "../models/job.model.js";
 
-export const getJobs = (): Promise<Job[]> => jobRepository.getAllJobs();
+export const getJobs = (): Promise<ProjectJob[]> => jobRepository.getAllJobs();
+
+export const getJobById = (id: string): Promise<Job> =>
+  jobRepository.getJobById(id);
 
 export const runJob = (
   id: string,
@@ -19,4 +27,5 @@ export default {
   runJob,
   getExecutionLogs,
   getExecutions,
+  getJobById,
 };

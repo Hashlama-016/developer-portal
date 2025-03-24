@@ -20,9 +20,8 @@ export const getAllProjects = async (): Promise<string[]> => {
     const response = await axios.get(`${RUNDECK_BASE_URL}/projects`, {
       headers,
     });
-    return response.data.map((p: { name: string }) => p.name);
+    return response.data.map((project: { name: string }) => project.name);
   } catch (error) {
-    console.error("Error fetching projects:", error);
     throw error;
   }
 };
@@ -33,21 +32,21 @@ export const getJobsByProject = async (projectName: string): Promise<Job[]> => {
       `${RUNDECK_BASE_URL}/project/${projectName}/jobs`,
       { headers }
     );
-    return response.data.map((job: ProjectJob) => ({
-      id: job.id,
-      name: job.name,
-      project: projectName,
-      group: job.group || "",
-      description: job.description || "",
-      uuid: job.uuid || "",
-    }));
+    return response.data.map(
+      (job: any): ProjectJob => ({
+        id: job.id,
+        name: job.name,
+        project: projectName,
+        group: job.group || "",
+        description: job.description || "",
+      })
+    );
   } catch (error) {
-    console.error(`Error fetching jobs for project ${projectName}:`, error);
-    return [];
+    throw error;
   }
 };
 
-export const getAllJobs = async (): Promise<Job[]> => {
+export const getAllJobs = async (): Promise<ProjectJob[]> => {
   const projects = await getAllProjects();
   const jobPromises = projects.map(getJobsByProject);
   const allJobs = await Promise.all(jobPromises);
@@ -55,22 +54,37 @@ export const getAllJobs = async (): Promise<Job[]> => {
 };
 
 export const getJobById = async (jobId: string): Promise<Job> => {
-  const response = await axios.get(`${RUNDECK_BASE_URL}/job/${jobId}`, {
-    headers,
-  });
-  return response.data;
+  try {
+    const response = await axios.get(`${RUNDECK_BASE_URL}/job/${jobId}`, {
+      headers,
+    });
+    return {
+      id: jobId,
+      name: response.data.name,
+      project: response.data.project,
+      description: response.data.description,
+      group: response.data.group,
+      options: response.data.options,
+    };
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const runJob = async (
   jobId: string,
   options: Record<string, string>
 ): Promise<string> => {
-  const response = await axios.post(
-    `${RUNDECK_BASE_URL}/job/${jobId}/run`,
-    options,
-    { headers }
-  );
-  return response.data.id;
+  try {
+    const response = await axios.post(
+      `${RUNDECK_BASE_URL}/job/${jobId}/run`,
+      options,
+      { headers }
+    );
+    return response.data.id as string;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const getExecutionLogs = async (
@@ -83,8 +97,7 @@ export const getExecutionLogs = async (
     );
     return (response.data.entries || []) as ExecutionLogEntry[];
   } catch (error) {
-    console.error(`Error fetching logs for execution ${executionId}:`, error);
-    return [];
+    throw error;
   }
 };
 
@@ -107,8 +120,7 @@ export const getExecutionsByJobId = async (
       user: execution.user || "",
     }));
   } catch (error) {
-    console.error(`Error fetching executions for job ${jobId}:`, error);
-    return [];
+    throw error;
   }
 };
 

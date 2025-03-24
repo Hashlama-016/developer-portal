@@ -4,7 +4,6 @@ export type Job = {
   project: string;
   group?: string;
   description?: string;
-  uuid?: string;
   options?: JobOptions;
 };
 

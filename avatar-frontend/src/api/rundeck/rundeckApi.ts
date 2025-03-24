@@ -1,31 +1,41 @@
 import api from "../axios";
-import { Job, Execution } from "./types";
+import {
+  Job,
+  Execution,
+  JobRunOptions,
+  ProjectJob,
+  ExecutionLogEntry,
+} from "./types";
 
-const RUNDECK_BASE_URL = "/rundeck";
+const RUNDECK_BASE_PATH = "/rundeck";
 
 export const rundeckApi = {
-  /** Fetch all jobs */
-  getAllJobs: async (): Promise<Job[]> => {
-    const response = await api.get<Job[]>(`${RUNDECK_BASE_URL}/jobs`);
+  getJobs: async (): Promise<ProjectJob[]> => {
+    const response = await api.get<ProjectJob[]>(`${RUNDECK_BASE_PATH}/jobs`);
     return response.data;
   },
-
-  /** Run a job */
-  runJob: async (
-    jobId: string,
-    options: Record<string, string>
-  ): Promise<string> => {
-    const response = await api.post<{ executionId: string }>(
-      `${RUNDECK_BASE_URL}/run`,
-      { jobId, options }
-    );
-    return response.data.executionId;
+  getJobById: async (jobId: string): Promise<Job> => {
+    const response = await api.get<Job>(`${RUNDECK_BASE_PATH}/jobs/${jobId}`);
+    return response.data;
   },
-
-  /** Fetch all executions */
-  getAllExecutions: async (): Promise<Execution[]> => {
+  runJob: async (jobId: string, options: JobRunOptions): Promise<string> => {
+    const response = await api.post<string>(
+      `${RUNDECK_BASE_PATH}/jobs/${jobId}/run`,
+      { options }
+    );
+    return response.data;
+  },
+  getExecutions: async (): Promise<Execution[]> => {
     const response = await api.get<Execution[]>(
-      `${RUNDECK_BASE_URL}/executions`
+      `${RUNDECK_BASE_PATH}/executions`
+    );
+    return response.data;
+  },
+  getExecutionLogs: async (
+    executionId: string
+  ): Promise<ExecutionLogEntry[]> => {
+    const response = await api.get<ExecutionLogEntry[]>(
+      `${RUNDECK_BASE_PATH}/executions/${executionId}/output`
     );
     return response.data;
   },

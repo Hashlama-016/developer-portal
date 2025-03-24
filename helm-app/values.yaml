@@ -21,3 +21,6 @@ back:
       - name: http
         containerPort: 80 
         port: 80
+
+image:
+  tag: "justplayin"

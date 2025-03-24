@@ -70,7 +70,15 @@ export const getJobById = async (jobId: string): Promise<Job> => {
       options: data.options?.map(
         (option: any): JobOptions => ({
           name: option.name,
+          label: option.label,
           defaultValue: option.value,
+          values: option.values,
+          delimiter: option.delimiter,
+          description: option.description,
+          isDate: option.isDate,
+          multivalued: option.multivalued,
+          required: option.required,
+          secure: option.secure,
         })
       ),
     };

@@ -9,7 +9,7 @@ export type Job = {
 
 export type JobOptions = {
   name: string;
-  value: string;
+  defaultValue: string;
 };
 
 export type JobRunOptions = Record<string, string>;

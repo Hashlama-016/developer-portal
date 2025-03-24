@@ -4,6 +4,7 @@ import {
   Execution,
   ProjectJob,
   ExecutionLogEntry,
+  JobOptions,
 } from "../models/job.model.js";
 
 const RUNDECK_BASE_URL = process.env.RUNDECK_BASE_URL;
@@ -58,13 +59,20 @@ export const getJobById = async (jobId: string): Promise<Job> => {
     const response = await axios.get(`${RUNDECK_BASE_URL}/job/${jobId}`, {
       headers,
     });
+    const data = response.data[0];
+
     return {
       id: jobId,
-      name: response.data.name,
-      project: response.data.project,
-      description: response.data.description,
-      group: response.data.group,
-      options: response.data.options,
+      name: data.name,
+      project: data.project,
+      description: data.description,
+      group: data.group,
+      options: data.options?.map(
+        (option: any): JobOptions => ({
+          name: option.name,
+          value: option.value,
+        })
+      ),
     };
   } catch (error) {
     throw error;

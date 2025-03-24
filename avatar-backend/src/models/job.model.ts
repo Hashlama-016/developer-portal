@@ -1,14 +1,22 @@
-export interface Job {
+export type Job = {
   id: string;
   name: string;
   project: string;
   group?: string;
   description?: string;
-  uuid?: string;
-  options?: Record<string, any>;
-}
+  options?: JobOptions;
+};
 
-export interface Execution {
+export type JobOptions = {
+  name: string;
+  value: string;
+};
+
+export type JobRunOptions = Record<string, string>;
+
+export type ProjectJob = Omit<Job, "options">;
+
+export type Execution = {
   id: string;
   jobId: string;
   jobName: string;
@@ -17,23 +25,11 @@ export interface Execution {
   startTime?: string;
   endTime?: string;
   user?: string;
-  logs?: string[] | null;
-}
+};
 
-export interface GetAllJobsResponse {
-  jobs: Job[];
-}
-
-export interface RunJobRequest {
-  jobId: string;
-  options: Record<string, string>;
-}
-
-export interface RunJobResponse {
-  executionId: string;
-  logs: string[];
-}
-
-export interface GetAllExecutionsResponse {
-  executions: Execution[];
-}
+export type ExecutionLogEntry = {
+  time: string;
+  level: string;
+  log: string;
+  user: string;
+};

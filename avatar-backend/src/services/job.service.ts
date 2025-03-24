@@ -1,43 +1,31 @@
 import jobRepository from "../repositories/job.repository.js";
 import {
-  GetAllJobsResponse,
-  RunJobRequest,
-  RunJobResponse,
-  GetAllExecutionsResponse,
+  Execution,
+  ExecutionLogEntry,
+  Job,
+  ProjectJob,
 } from "../models/job.model.js";
 
-/**
- * שליפת כל ה-Jobs מכל הפרויקטים
- */
-export const fetchAllJobs = async (): Promise<GetAllJobsResponse> => ({
-  jobs: await jobRepository.fetchAllJobs(),
-});
+export const getJobs = (): Promise<ProjectJob[]> => jobRepository.getAllJobs();
 
-/**
- * הרצת Job וקבלת הלוגים
- */
-export const runJobAndGetLogs = async (
-  request: RunJobRequest
-): Promise<RunJobResponse> => {
-  const executionId = await jobRepository.runJob(
-    request.jobId,
-    request.options
-  );
-  await new Promise((resolve) => setTimeout(resolve, 2000)); // המתנה ללוגים
-  const logs = await jobRepository.fetchExecutionLogs(executionId);
-  return { executionId, logs };
-};
+export const getJobById = (id: string): Promise<Job> =>
+  jobRepository.getJobById(id);
 
-/**
- * שליפת כל ההרצות האחרונות מכל ה-Jobs
- */
-export const fetchAllExecutions =
-  async (): Promise<GetAllExecutionsResponse> => ({
-    executions: await jobRepository.fetchAllExecutions(),
-  });
+export const runJob = (
+  id: string,
+  options: Record<string, string>
+): Promise<string> => jobRepository.runJob(id, options);
+
+export const getExecutions = (): Promise<Execution[]> =>
+  jobRepository.getAllExecutions();
+
+export const getExecutionLogs = (id: string): Promise<ExecutionLogEntry[]> =>
+  jobRepository.getExecutionLogs(id);
 
 export default {
-  fetchAllJobs,
-  runJobAndGetLogs,
-  fetchAllExecutions,
+  getJobs,
+  runJob,
+  getExecutionLogs,
+  getExecutions,
+  getJobById,
 };

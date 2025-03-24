@@ -9,13 +9,12 @@ import {
   Button,
 } from "@mui/material";
 import { rundeckApi, ProjectJob } from "@/api";
-import "./Services.css";
 
 const Services: FunctionComponent = () => {
   const [services, setServices] = useState<ProjectJob[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedService, setSelectedService] = useState<string | null>(null);
+  const [error, setError] = useState<string>();
+  const [selectedService, setSelectedService] = useState<string>();
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -48,7 +47,7 @@ const Services: FunctionComponent = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 3 }}>
-      <Grid2 container spacing={3}>
+      <Grid2 container spacing={4}>
         {services.map((service) => (
           <Grid2
             size={{ xs: 12, sm: 6, md: 4 }}
@@ -78,8 +77,11 @@ const Services: FunctionComponent = () => {
                 >
                   {service.name}
                 </Typography>
-                <Typography variant="h6" sx={{ color: "white" }}>
-                  {service.project}
+                <Typography variant="body1" sx={{ color: "white" }}>
+                  project: {service.project}
+                </Typography>
+                <Typography variant="body1" sx={{ color: "white" }}>
+                  {service.description}
                 </Typography>
               </CardContent>
               <Button

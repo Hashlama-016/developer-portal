@@ -1,22 +1,47 @@
-// Details.tsx
-import { Box, Typography, Button, Card, CardContent } from "@mui/material";
+import { useState, useEffect } from "react";
+import { Box, Typography, Button, Card, CardContent, CircularProgress} from "@mui/material";
+import type { Execution } from "@/api";
+import type { ExecutionLogEntry } from "@/api";
+import { Logs } from "./Logs";
+import { rundeckApi } from "@/api";
+
 
 interface DetailsProps {
-  order: {
-    id: string;
-    jobId: string;
-    jobName: string;
-    project: string;
-    status: string;
-    startTime: string;
-    endTime: string;
-    user: string;
-    logs: string[];
-  };
+  order: Execution;
   onClose: () => void;
 }
 
 export const Details: React.FC<DetailsProps> = ({ order, onClose }) => {
+  const [currentOrder, setCurrentOrder] = useState<string>();
+  const [selectedLogs, setSelectedLogs] = useState<ExecutionLogEntry>();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await rundeckApi.getExecutionLogs(order.id);
+        console.log(response)
+        setSelectedLogs(response[response.length-1]);
+      } catch (err) {
+        setError("Failed to fetch orders");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  if (loading)
+    return (
+      <div>
+        <CircularProgress />
+      </div>
+    );
+  if (error) return <div style={{ textAlign: "center", color: "red" }}>{error}</div>;
+
   return (
     <Box
       sx={{
@@ -33,6 +58,10 @@ export const Details: React.FC<DetailsProps> = ({ order, onClose }) => {
         zIndex: 9999,
       }}
     >
+      {
+      currentOrder &&
+      <Logs orderId ={currentOrder} onCloseLog={() => setCurrentOrder(undefined)} />
+    }
       <Card
         sx={{
           maxWidth: 600,
@@ -48,25 +77,14 @@ export const Details: React.FC<DetailsProps> = ({ order, onClose }) => {
           <Typography variant="h5" gutterBottom>
             Order Details
           </Typography>
-          <Typography>ID: {order.id}</Typography>
-          <Typography>Job Name: {order.jobName}</Typography>
-          <Typography>Project: {order.project}</Typography>
-          <Typography>Status: {order.status}</Typography>
-          <Typography>User: {order.user}</Typography>
-          <Typography sx={{ color: "text.secondary", mb: 1 }}>
-            Start Time: {order.startTime}
-          </Typography>
-          <Typography sx={{ color: "text.secondary", mb: 1 }}>
-            End Time: {order.endTime}
-          </Typography>
-          <Typography>Logs: {order.logs.join(", ")}</Typography>
+          <Typography>{ selectedLogs?.log}</Typography>
           <Button
             variant="contained"
             onClick={onClose}
-            sx={{ mt: 2 }}
+            sx={{ mt: 2, mr:2}}
           >
             Close
-          </Button>
+          </Button>  
         </CardContent>
       </Card>
     </Box>

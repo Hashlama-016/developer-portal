@@ -6,8 +6,6 @@ rdeck.base=/var/lib/rundeck
 rss.enabled=false
 # change hostname here
 grails.serverURL=http://{{ ansible_all_ipv4_addresses[0] }}:4440
-dataSource.dbCreate = none
-dataSource.url = jdbc:h2:file:/var/lib/rundeck/data/rundeckdb;DB_CLOSE_ON_EXIT=FALSE;NON_KEYWORDS=MONTH,HOUR,MINUTE,YEAR,SECONDS
 grails.plugin.databasemigration.updateOnStart=true
 
 # Encryption for key storage
@@ -33,3 +31,12 @@ rundeck.config.storage.converter.1.config.provider=BC
 
 rundeck.feature.repository.enabled=true
 
+# local db
+# dataSource.dbCreate = none
+# dataSource.url = jdbc:h2:file:/var/lib/rundeck/data/rundeckdb;DB_CLOSE_ON_EXIT=FALSE;NON_KEYWORDS=MONTH,HOUR,MINUTE,YEAR,SECONDS
+
+# remote
+dataSource.driverClassName = org.postgresql.Driver
+dataSource.url = {{ db_url }}
+dataSource.username = {{ db_username }}
+dataSource.password= {{ db_password }}

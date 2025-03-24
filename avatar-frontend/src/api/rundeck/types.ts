@@ -2,7 +2,7 @@ export type Job = {
   id: string;
   name: string;
   description?: string;
-  options?: JobOptions;
+  options?: JobOptions[];
 };
 
 export type JobOptions = {

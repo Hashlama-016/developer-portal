@@ -1,8 +1,5 @@
-import { FunctionComponent, useEffect, useState } from "react";
+// Details.tsx
 import { Box, Typography, Button, Card, CardContent } from "@mui/material";
-import { rundeckApi } from "@/api";
-import type { Execution } from "@/api";
-import "./Details.css";
 
 interface DetailsProps {
   order: {
@@ -21,21 +18,33 @@ interface DetailsProps {
 
 export const Details: React.FC<DetailsProps> = ({ order, onClose }) => {
   return (
-    <Box className="detail-box"
+    <Box
       sx={{
         position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        backdropFilter: "blur(5px)",
+        zIndex: 9999,
       }}
     >
-      <Card className="detail-card"
+      <Card
         sx={{
           maxWidth: 600,
           width: "90%",
-          padding: 3,
+          p: 3,
           borderRadius: 2,
           boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)",
+          bgcolor: "background.paper",
+          border: "2px solid rgba(88, 101, 242, 0.4)",
         }}
       >
-        <CardContent>
+        <CardContent sx={{ textAlign: "center"}}>
           <Typography variant="h5" gutterBottom>
             Order Details
           </Typography>
@@ -44,8 +53,12 @@ export const Details: React.FC<DetailsProps> = ({ order, onClose }) => {
           <Typography>Project: {order.project}</Typography>
           <Typography>Status: {order.status}</Typography>
           <Typography>User: {order.user}</Typography>
-          <Typography className="detail-date">Start Time: {order.startTime}</Typography>
-          <Typography className="detail-date">End Time: {order.endTime}</Typography>
+          <Typography sx={{ color: "text.secondary", mb: 1 }}>
+            Start Time: {order.startTime}
+          </Typography>
+          <Typography sx={{ color: "text.secondary", mb: 1 }}>
+            End Time: {order.endTime}
+          </Typography>
           <Typography>Logs: {order.logs.join(", ")}</Typography>
           <Button
             variant="contained"

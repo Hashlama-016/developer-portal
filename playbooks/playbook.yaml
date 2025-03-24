@@ -40,7 +40,7 @@
 
     - name: config rundeck-config.properties
       template: 
-        src: rundeck-config.properties.j2
+        src: ../templates/rundeck-config.properties.j2
         dest: /etc/rundeck/rundeck-config.properties
       notify:
         - restart Rundeck

@@ -1,3 +1,6 @@
 # developer-portal
 
-YcmRXSJoaoISqgTDzB583GMjGlvfnCT6
+token - YcmRXSJoaoISqgTDzB583GMjGlvfnCT6
+
+שם משתמש: admin  
+סיסמה: NaiTithanPai35!

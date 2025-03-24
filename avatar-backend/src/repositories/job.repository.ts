@@ -141,8 +141,8 @@ export const getExecutionsByJobId = async (
         jobName: execution.job.name,
         project: execution.project,
         status: execution.status,
-        startTime: execution.dateStarted?.date,
-        endTime: execution.dateEnded?.date,
+        startTime: execution["date-started"]?.date,
+        endTime: execution["date-ended"]?.date,
         user: execution.user,
       })
     );

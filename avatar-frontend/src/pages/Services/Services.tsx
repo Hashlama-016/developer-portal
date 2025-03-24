@@ -19,8 +19,8 @@ const Services: FunctionComponent = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await rundeckApi.getJobs();
-        setServices(response);
+        const data = await rundeckApi.getJobs();
+        setServices(data);
       } catch (err) {
         setError("Failed to fetch services");
         console.error(err);

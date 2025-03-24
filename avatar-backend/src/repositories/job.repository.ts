@@ -27,7 +27,9 @@ export const getAllProjects = async (): Promise<string[]> => {
   }
 };
 
-export const getJobsByProject = async (projectName: string): Promise<Job[]> => {
+export const getJobsByProject = async (
+  projectName: string
+): Promise<ProjectJob[]> => {
   try {
     const response = await axios.get(
       `${RUNDECK_BASE_URL}/project/${projectName}/jobs`,
@@ -64,9 +66,7 @@ export const getJobById = async (jobId: string): Promise<Job> => {
     return {
       id: jobId,
       name: data.name,
-      project: data.project,
       description: data.description,
-      group: data.group,
       options: data.options?.map(
         (option: any): JobOptions => ({
           name: option.name,

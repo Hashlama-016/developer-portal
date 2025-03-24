@@ -9,6 +9,7 @@ import {
   Button,
 } from "@mui/material";
 import { rundeckApi, ProjectJob } from "@/api";
+import ServiceRunner from "./ServiceRunner";
 
 const Services: FunctionComponent = () => {
   const [services, setServices] = useState<ProjectJob[]>([]);
@@ -32,11 +33,6 @@ const Services: FunctionComponent = () => {
     fetchServices();
   }, []);
 
-  const handleButtonClick = (serviceId: string) => {
-    setSelectedService(serviceId);
-    console.log(selectedService);
-  };
-
   if (loading)
     return (
       <div>
@@ -47,6 +43,9 @@ const Services: FunctionComponent = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 3 }}>
+      {selectedService && (
+        <ServiceRunner serviceId={selectedService} onCancel={() => setSelectedService(undefined)} />
+      )}
       <Grid2 container spacing={4}>
         {services.map((service) => (
           <Grid2
@@ -88,9 +87,9 @@ const Services: FunctionComponent = () => {
                 variant="outlined"
                 fullWidth
                 sx={{ mt: "auto" }}
-                onClick={() => handleButtonClick(service.id)}
+                onClick={() => setSelectedService(service.id)}
               >
-                Details
+                Open
               </Button>
             </Card>
           </Grid2>

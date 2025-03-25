@@ -9,17 +9,15 @@ interface LogsProps {
 }
 
 export const Logs: React.FC<LogsProps> = ({ orderId, onCloseLog }) => {
-    const [selectedLogs, setSelectedLogs] = useState<ExecutionLogEntry[]>();
+  const [selectedLogs, setSelectedLogs] = useState<ExecutionLogEntry[]>();
 
-
-    useEffect(() => {
-        const openLogs = async () => {
-            const response = await rundeckApi.getExecutionLogs(orderId);
-            setSelectedLogs(response);
-        };
-        openLogs();
-      }, [selectedLogs]);
-    
+  useEffect(() => {
+    const openLogs = async () => {
+      const response = await rundeckApi.getExecutionLogs(orderId);
+      setSelectedLogs(response);
+    };
+    openLogs();
+  }, [selectedLogs]);
 
   return (
     <Box
@@ -48,19 +46,14 @@ export const Logs: React.FC<LogsProps> = ({ orderId, onCloseLog }) => {
           border: "2px solid rgba(88, 101, 242, 0.4)",
         }}
       >
-        <CardContent sx={{ textAlign: "center"}}>
+        <CardContent sx={{ textAlign: "center" }}>
           <Typography variant="h5" gutterBottom>
             Logs Details
           </Typography>
-          <Typography>Logs: {selectedLogs.join(", ")}</Typography>
-          <Button
-            variant="contained"
-            onClick={() => onCloseLog}
-            sx={{ mt: 2}}
-          >
+          <Typography>Logs: {selectedLogs?.join(", ")}</Typography>
+          <Button variant="contained" onClick={() => onCloseLog} sx={{ mt: 2 }}>
             Close Logs
           </Button>
-          
         </CardContent>
       </Card>
     </Box>

@@ -15,6 +15,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Job, JobRunOptions, rundeckApi } from "@/api";
+import theme from "@/style/theme";
 
 interface Props {
   serviceId: string;
@@ -78,7 +79,7 @@ const ServiceRunner: FunctionComponent<Props> = ({ serviceId, onCancel }) => {
         justifyContent: "center",
         backgroundColor: "rgba(0, 0, 0, 0.5)",
         backdropFilter: "blur(5px)",
-        zIndex: 9999,
+        zIndex: 1000,
       }}
     >
       <Card
@@ -123,7 +124,7 @@ const ServiceRunner: FunctionComponent<Props> = ({ serviceId, onCancel }) => {
                           MenuProps={{
                             PaperProps: {
                               style: {
-                                zIndex: 1301, // Higher than modal backdrop (1000)
+                                backgroundColor: theme.palette.background.default
                               },
                             },
                           }}

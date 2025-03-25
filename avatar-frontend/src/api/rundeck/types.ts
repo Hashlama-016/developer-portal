@@ -20,8 +20,13 @@ export type JobOptions = {
 
 export type JobRunOptions = Record<string, string>;
 
+export type Project = {
+  name: string;
+  label?: string;
+};
+
 export type ProjectJob = Omit<Job, "options"> & {
-  project: string;
+  project: Project;
   group?: string;
 };
 

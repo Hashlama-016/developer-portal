@@ -5,6 +5,7 @@ import {
   ProjectJob,
   ExecutionLogEntry,
   JobOptions,
+  Project,
 } from "../models/job.model.js";
 
 const RUNDECK_BASE_URL = process.env.RUNDECK_BASE_URL;
@@ -16,30 +17,35 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-export const getAllProjects = async (): Promise<string[]> => {
+export const getAllProjects = async (): Promise<Project[]> => {
   try {
     const response = await axios.get(`${RUNDECK_BASE_URL}/projects`, {
       headers,
     });
-    return response.data.map((project: { name: string }) => project.name);
+    return response.data.map(
+      (project: any): Project => ({
+        name: project.name,
+        label: project.label,
+      })
+    );
   } catch (error) {
     throw error;
   }
 };
 
 export const getJobsByProject = async (
-  projectName: string
+  project: Project
 ): Promise<ProjectJob[]> => {
   try {
     const response = await axios.get(
-      `${RUNDECK_BASE_URL}/project/${projectName}/jobs`,
+      `${RUNDECK_BASE_URL}/project/${project.name}/jobs`,
       { headers }
     );
     return response.data.map(
       (job: any): ProjectJob => ({
         id: job.id,
         name: job.name,
-        project: projectName,
+        project: project,
         group: job.group,
         description: job.description,
       })

@@ -77,7 +77,7 @@ const Services: FunctionComponent = () => {
                   {service.name}
                 </Typography>
                 <Typography variant="body1" sx={{ color: "white" }}>
-                  project: {service.project}
+                  project: {service.project.label || service.project.name}
                 </Typography>
                 <Typography variant="body1" sx={{ color: "white" }}>
                   {service.description}

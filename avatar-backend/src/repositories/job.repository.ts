@@ -94,7 +94,7 @@ export const runJob = async (
   try {
     const response = await axios.post(
       `${RUNDECK_BASE_URL}/job/${jobId}/run`,
-      options,
+      { options },
       { headers }
     );
     return response.data.id as string;

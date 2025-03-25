@@ -138,6 +138,7 @@ const ServiceRunner: FunctionComponent<Props> = ({ serviceId, onCancel }) => {
                           id={option.name}
                           name={option.name}
                           defaultValue={option.defaultValue}
+                          type={option.secure ? "password" : "text"}
                           aria-describedby={`${option.name}-helper`}
                         />
                       )}

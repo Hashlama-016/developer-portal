@@ -7,7 +7,7 @@
 :root {
   --primary-color: #1a1f36;
   --secondary-color: #5865f2;
-  --accent-color: #9b59b6;
+  --accent-color: #1976d2;
   --text-color: #e0e0e0;
   --text-light: #b0b0b0;
   --background-dark: #121212;
@@ -20,6 +20,7 @@
   --spacing-lg: 2rem;
   --spacing-xl: 2.5rem;
   --glass-effect: rgba(255, 255, 255, 0.1);
+  --text-extra-color: #1976d2;
 }
 
 body {
@@ -31,6 +32,7 @@ body {
   flex-direction: column;
   align-items: center;
   padding-top: 6rem;
+  text-align: center;
 }
 
 /* Navigation */
@@ -97,7 +99,7 @@ body {
 
 .service-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 15px 40px rgba(88, 101, 242, 0.4);
+  box-shadow: 0 15px 40px #1976d2;
 }
 
 .service-icon {
@@ -152,65 +154,3 @@ h2 {
   backdrop-filter: blur(10px);
 }
 
-.order-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 35px rgba(155, 89, 182, 0.4);
-}
-
-.order-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-md);
-}
-
-.order-status {
-  font-size: 1rem;
-  font-weight: 500;
-  padding: var(--spacing-sm);
-  border-radius: 20px;
-  text-transform: uppercase;
-}
-
-.status-pending {
-  background: #ffcc00;
-  color: #3a2800;
-}
-
-.status-completed {
-  background: #2ecc71;
-  color: #ffffff;
-}
-
-.progress-bar {
-  height: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.progress {
-  height: 100%;
-  background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
-  border-radius: 3px;
-  transition: width 0.3s ease;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  h1 {
-    font-size: 2.2rem;
-  }
-
-  h2 {
-    font-size: 1.5rem;
-  }
-
-  .services-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .orders-list {
-    grid-template-columns: 1fr;
-  }
-}

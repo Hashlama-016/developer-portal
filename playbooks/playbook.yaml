@@ -4,7 +4,7 @@
   gather_facts: no
   become: yes
   vars_files:
-    - ../secerts/sercrets.yaml
+    - ../vault/secrets.yaml
   tasks:
 
   #### install rundeck ###

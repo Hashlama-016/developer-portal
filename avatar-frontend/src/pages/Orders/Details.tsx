@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
-import { Box, Typography, Button, Card, CardContent, CircularProgress} from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+} from "@mui/material";
 import type { Execution } from "@/api";
 import type { ExecutionLogEntry } from "@/api";
-import { Logs } from "./Logs";
 import { rundeckApi } from "@/api";
-
 
 interface DetailsProps {
   order: Execution;
@@ -12,7 +17,6 @@ interface DetailsProps {
 }
 
 export const Details: React.FC<DetailsProps> = ({ order, onClose }) => {
-  const [currentOrder, setCurrentOrder] = useState<string>();
   const [selectedLogs, setSelectedLogs] = useState<ExecutionLogEntry>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,8 +25,7 @@ export const Details: React.FC<DetailsProps> = ({ order, onClose }) => {
     const fetchOrders = async () => {
       try {
         const response = await rundeckApi.getExecutionLogs(order.id);
-        console.log(response)
-        setSelectedLogs(response[response.length-1]);
+        setSelectedLogs(response[response.length - 1]);
       } catch (err) {
         setError("Failed to fetch orders");
         console.error(err);
@@ -32,7 +35,7 @@ export const Details: React.FC<DetailsProps> = ({ order, onClose }) => {
     };
 
     fetchOrders();
-  }, []);
+  }, [order.id]);
 
   if (loading)
     return (
@@ -40,7 +43,8 @@ export const Details: React.FC<DetailsProps> = ({ order, onClose }) => {
         <CircularProgress />
       </div>
     );
-  if (error) return <div style={{ textAlign: "center", color: "red" }}>{error}</div>;
+  if (error)
+    return <div style={{ textAlign: "center", color: "red" }}>{error}</div>;
 
   return (
     <Box
@@ -58,10 +62,6 @@ export const Details: React.FC<DetailsProps> = ({ order, onClose }) => {
         zIndex: 9999,
       }}
     >
-      {
-      currentOrder &&
-      <Logs orderId ={currentOrder} onCloseLog={() => setCurrentOrder(undefined)} />
-    }
       <Card
         sx={{
           maxWidth: 600,
@@ -73,18 +73,14 @@ export const Details: React.FC<DetailsProps> = ({ order, onClose }) => {
           border: "2px solid rgba(88, 101, 242, 0.4)",
         }}
       >
-        <CardContent sx={{ textAlign: "center"}}>
+        <CardContent sx={{ textAlign: "center" }}>
           <Typography variant="h5" gutterBottom>
             Order Details
           </Typography>
-          <Typography>{ selectedLogs?.log}</Typography>
-          <Button
-            variant="contained"
-            onClick={onClose}
-            sx={{ mt: 2, mr:2}}
-          >
+          <Typography>{selectedLogs!.log}</Typography>
+          <Button variant="contained" onClick={onClose} sx={{ mt: 2, mr: 2 }}>
             Close
-          </Button>  
+          </Button>
         </CardContent>
       </Card>
     </Box>

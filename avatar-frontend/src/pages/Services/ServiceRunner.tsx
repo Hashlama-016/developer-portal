@@ -15,6 +15,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Job, JobRunOptions, rundeckApi } from "@/api";
+import theme from "@/style/theme";
 
 interface Props {
   serviceId: string;
@@ -39,7 +40,7 @@ const ServiceRunner: FunctionComponent<Props> = ({ serviceId, onCancel }) => {
     fetchService();
   }, [serviceId]);
 
-  const handleSubmit = (formData: FormData) => {
+  const handleSubmit = async (formData: FormData) => {
     const runArgs: JobRunOptions = {};
 
     if (service && service.options) {
@@ -50,13 +51,10 @@ const ServiceRunner: FunctionComponent<Props> = ({ serviceId, onCancel }) => {
       });
     }
 
-    runJob(runArgs);
+    await runJob(runArgs);
   };
 
-  const runJob = (args: JobRunOptions) => {
-    console.log(args);
-  };
-
+  const runJob = (args: JobRunOptions) => rundeckApi.runJob(serviceId, args);
   if (!service)
     return (
       <div>
@@ -78,7 +76,7 @@ const ServiceRunner: FunctionComponent<Props> = ({ serviceId, onCancel }) => {
         justifyContent: "center",
         backgroundColor: "rgba(0, 0, 0, 0.5)",
         backdropFilter: "blur(5px)",
-        zIndex: 9999,
+        zIndex: 1000,
       }}
     >
       <Card
@@ -123,7 +121,8 @@ const ServiceRunner: FunctionComponent<Props> = ({ serviceId, onCancel }) => {
                           MenuProps={{
                             PaperProps: {
                               style: {
-                                zIndex: 1301, // Higher than modal backdrop (1000)
+                                backgroundColor:
+                                  theme.palette.background.default,
                               },
                             },
                           }}

@@ -40,7 +40,7 @@ const ServiceRunner: FunctionComponent<Props> = ({ serviceId, onCancel }) => {
     fetchService();
   }, [serviceId]);
 
-  const handleSubmit = (formData: FormData) => {
+  const handleSubmit = async (formData: FormData) => {
     const runArgs: JobRunOptions = {};
 
     if (service && service.options) {
@@ -51,13 +51,10 @@ const ServiceRunner: FunctionComponent<Props> = ({ serviceId, onCancel }) => {
       });
     }
 
-    runJob(runArgs);
+    await runJob(runArgs);
   };
 
-  const runJob = (args: JobRunOptions) => {
-    console.log(args);
-  };
-
+  const runJob = (args: JobRunOptions) => rundeckApi.runJob(serviceId, args);
   if (!service)
     return (
       <div>
@@ -124,7 +121,8 @@ const ServiceRunner: FunctionComponent<Props> = ({ serviceId, onCancel }) => {
                           MenuProps={{
                             PaperProps: {
                               style: {
-                                backgroundColor: theme.palette.background.default
+                                backgroundColor:
+                                  theme.palette.background.default,
                               },
                             },
                           }}

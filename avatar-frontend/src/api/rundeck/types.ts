@@ -1,10 +1,8 @@
 export type Job = {
   id: string;
   name: string;
-  project: string;
-  group?: string;
   description?: string;
-  options?: JobOptions;
+  options?: JobOptions[];
 };
 
 export type JobOptions = {
@@ -22,7 +20,10 @@ export type JobOptions = {
 
 export type JobRunOptions = Record<string, string>;
 
-export type ProjectJob = Omit<Job, "options">;
+export type ProjectJob = Omit<Job, "options"> & {
+  project: string;
+  group?: string;
+};
 
 export type Execution = {
   id: string;

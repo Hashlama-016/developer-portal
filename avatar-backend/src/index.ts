@@ -3,6 +3,7 @@ import cors from "cors";
 import defaultRouter from "./routers/index.js";
 import logger from "./logger.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
+import loggerMiddleware from "./middlewares/logger.middleware.js";
 
 const port = Number(process.env.PORT || 8080);
 const app = express();
@@ -14,6 +15,7 @@ app.use(
     origin: [process.env.CLIENT_URL || ""],
   })
 );
+app.use(loggerMiddleware);
 
 app.use("/api", defaultRouter);
 

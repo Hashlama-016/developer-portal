@@ -7,6 +7,7 @@ import {
   Typography,
   Button,
   CircularProgress,
+  useTheme,
 } from "@mui/material";
 import { Details } from "./Details";
 import { rundeckApi } from "@/api";
@@ -41,8 +42,20 @@ const Orders: FunctionComponent = () => {
     const order = orders.find((order) => order.id === orderId);
     setSelectedOrder(order);
   };
+  const theme = useTheme();
 
-
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "succeeded":
+        return "success"; // Return the palette key without ".main"
+      case "failed":
+        return "error";
+      case "aborted":
+        return "warning";
+      default:
+        return "text.primary"; // Directly return the text color
+    }
+  };
   if (loading)
     return (
       <div>
@@ -80,7 +93,12 @@ const Orders: FunctionComponent = () => {
                 <Typography variant="h2" sx={{ color: "white" }}>
                   {order.jobName}
                 </Typography>
-                <Typography variant="h6" sx={{ color: "white" }}>
+                <Typography variant="h6"    sx={{
+                    color:
+                      getStatusColor(order.status) === "text.primary"
+                        ? theme.palette.text.primary
+                        : (theme.palette as any)[getStatusColor(order.status)].main, 
+                  }}>
                   status: {order.status}
                 </Typography>
               </CardContent>

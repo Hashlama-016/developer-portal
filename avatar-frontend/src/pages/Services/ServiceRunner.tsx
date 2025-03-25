@@ -10,8 +10,11 @@ import {
   Input,
   InputLabel,
   Grid2,
+  FormHelperText,
+  Select,
+  MenuItem,
 } from "@mui/material";
-import { Job, rundeckApi } from "@/api";
+import { Job, JobRunOptions, rundeckApi } from "@/api";
 
 interface Props {
   serviceId: string;
@@ -35,6 +38,24 @@ const ServiceRunner: FunctionComponent<Props> = ({ serviceId, onCancel }) => {
 
     fetchService();
   }, [serviceId]);
+
+  const handleSubmit = (formData: FormData) => {
+    const runArgs: JobRunOptions = {};
+
+    if (service && service.options) {
+      service.options.forEach((option) => {
+        if (formData.has(option.name)) {
+          runArgs[option.name] = formData.get(option.name)!.toString();
+        }
+      });
+    }
+
+    runJob(runArgs);
+  };
+
+  const runJob = (args: JobRunOptions) => {
+    console.log(args);
+  };
 
   if (!service)
     return (
@@ -78,20 +99,66 @@ const ServiceRunner: FunctionComponent<Props> = ({ serviceId, onCancel }) => {
           {service.description && (
             <Typography>description: {service.description}</Typography>
           )}
-          <Typography>
-            <FormControl>
-              <InputLabel htmlFor="my-input">Email address</InputLabel>
-              <Input id="my-input" aria-describedby="my-helper-text" type="" />
-            </FormControl>
-          </Typography>
-          <Grid2 container spacing={1} justifyContent="center">
+          <form action={handleSubmit}>
+            {service.options && (
+              <Grid2 container spacing={3} justifyContent="center">
+                <Grid2 size={{ xs: 12, sm: 8, md: 10 }}>
+                  {service.options.map((option) => (
+                    <FormControl
+                      key={option.name}
+                      variant="standard"
+                      margin="normal"
+                      fullWidth
+                      required={!!option.required}
+                    >
+                      <InputLabel htmlFor={option.name}>
+                        {option.label || option.name}
+                      </InputLabel>
+                      {option.values ? (
+                        <Select
+                          id={option.name}
+                          name={option.name}
+                          defaultValue={option.defaultValue}
+                          aria-describedby={`${option.name}-helper`}
+                          MenuProps={{
+                            PaperProps: {
+                              style: {
+                                zIndex: 1301, // Higher than modal backdrop (1000)
+                              },
+                            },
+                          }}
+                        >
+                          {option.values.map((itemValue) => (
+                            <MenuItem key={itemValue} value={itemValue}>
+                              {itemValue}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      ) : (
+                        <Input
+                          id={option.name}
+                          name={option.name}
+                          defaultValue={option.defaultValue}
+                          aria-describedby={`${option.name}-helper`}
+                        />
+                      )}
+                      <FormHelperText id={`${option.name}-helper`}>
+                        {option.description}
+                      </FormHelperText>
+                    </FormControl>
+                  ))}
+                </Grid2>
+              </Grid2>
+            )}
+            <Grid2 container spacing={1} justifyContent="center">
               <Button variant="contained" onClick={onCancel} sx={{ mt: 2 }}>
                 Cancel
               </Button>
-              <Button variant="contained" sx={{ mt: 2 }}>
+              <Button variant="contained" sx={{ mt: 2 }} type="submit">
                 Start
               </Button>
-          </Grid2>
+            </Grid2>
+          </form>
         </CardContent>
       </Card>
     </Box>
